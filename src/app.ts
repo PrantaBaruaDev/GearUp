@@ -26,22 +26,40 @@ app.use(express.json());
 app.use(express.urlencoded({ extended : true }));
 app.use(cookieParser());
 
-
+const routeList = [
+    "POST /api/admin/categories",
+    "GET /api/categories",
+    "GET /api/categories/:ID",
+    "PATCH /api/admin/categories/:id",
+    "DELETE /api/admin/categories/:id",
+]
 
 app.get("/",(req : Request, res : Response) => {
-    res.send("Hello, Welcome To The GearUp!");
+
+    const fetchRouteList = () => {
+        routeList.map((value, key) => {
+            `<li>${routeList}</li>`;
+        })
+    }
+    res.send(`
+        <h1>Hello, Welcome To The GearUp!</h1>
+
+        <ul>
+            ${fetchRouteList()}
+        </ul>
+    `);
 });
 
 app.use("/api/auth", AuthRouter);
 app.use("/api/admin", AdminManagementRouter);
 app.use("/api/users", UserRouter);
-// app.use("/api/provider", ProviderManagementRouter);
+app.use("/api/provider", ProviderManagementRouter);
 app.use("/api/gear", GearsRouter);
 app.use("/api/categories", CategoriesRoute);
-// app.use("/api/rental/items", RentalItemsRoute);
-// app.use("/api/rental/orders", RentalOrdersRoute);
-// app.use("/api/payments", PaymentsRoute);
-// app.use("/api/reviews", ReviewsRoute);
+app.use("/api/rental/items", RentalItemsRoute);
+app.use("/api/rentals", RentalOrdersRoute);
+app.use("/api/payments", PaymentsRoute);
+app.use("/api/reviews", ReviewsRoute);
 
 
 app.use(notFound)
