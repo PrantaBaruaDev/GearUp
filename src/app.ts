@@ -27,25 +27,40 @@ app.use(express.urlencoded({ extended : true }));
 app.use(cookieParser());
 
 const routeList = [
+    // Category Routes
+    "Category Route",
     "POST /api/admin/categories",
     "GET /api/categories",
     "GET /api/categories/:ID",
     "PATCH /api/admin/categories/:id",
     "DELETE /api/admin/categories/:id",
+    "",
+    "",
+
+    // Gear Item Routes
+    "Gear Routes",
+    "GET /api/gear",
+    "GET /api/gear/:id",
+    "GET /api/provider/gear/:id",
+    "POST /api/provider/gear",
+    "PATCH /api/provider/gear/:id",
+    "DELETE /api/provider/gear/:id",
+    "GET /api/admin/gear",
+    "GET /api/admin/gear/:id",
+    "POST /api/admin/gear",
+    "PATCH /api/admin/gear/:id",
+    "DELETE /api/admin/gear/:id",
+
+
 ]
 
-app.get("/",(req : Request, res : Response) => {
+app.get("/", (req: Request, res: Response) => {
+    const routeItems = routeList.map((value, key) => `<li key=${key}>${value}</li>`).join("");
 
-    const fetchRouteList = () => {
-        routeList.map((value, key) => {
-            `<li>${routeList}</li>`;
-        })
-    }
     res.send(`
         <h1>Hello, Welcome To The GearUp!</h1>
-
         <ul>
-            ${fetchRouteList()}
+            ${routeItems}
         </ul>
     `);
 });

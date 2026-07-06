@@ -24,7 +24,7 @@ POST `/api/auth/register`
 
 **PROVIDER**
 ```JSON
-{   
+{
     "name": "Pranta2 Barua", 
     "email": "pranta2.provider@mail.com", 
     "password": "1234", 
