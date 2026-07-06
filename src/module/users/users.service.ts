@@ -1,8 +1,9 @@
+import { useReducer } from "react";
 import { ActiveStatus, Role } from "../../../generated/prisma/enums";
 import { config } from "../../config";
 import { ApiError } from "../../errors/ApiError";
 import { prisma } from "../../lib/prisma";
-import { IRegisterUserPayload, IUserProfilePayload } from "./users.interface";
+import { IRegisterUserPayload, IUserProfilePayload, IUserProfileQuery } from "./users.interface";
 import bcrypt from "bcryptjs";
 import httpStatus from 'http-status';
 
@@ -12,7 +13,7 @@ class UserService {
     private UserValidation = {
         user: (payload: IRegisterUserPayload) => {
             if(!payload)
-                throw new ApiError( httpStatus.NOT_FOUND, "Forbidden! your are not permission to create this role.");
+                throw new ApiError( httpStatus.NOT_FOUND, "User Not Found.");
         },
         userRolePermission: (role: Role) => {
             if (role === Role.ADMIN)    
@@ -121,8 +122,27 @@ class UserService {
         return user;
     }
 
+    async getUserById (id: IUserProfileQuery["id"]) {
+        const user = await prisma.users.findFirstOrThrow({
+            where: { id }
+        });
+
+        if(!user)   throw new Error("User not exist.");
+
+        return user;
+    }
+
     async updateMyProfileInDB(userId : string, payload : IUserProfilePayload) {
-        const { name, profilePhoto, bio, address, phone } = payload;
+        const { name, profilePhoto, address, phone } = payload;
+
+        const user = await prisma.users.findFirstOrThrow({
+            where: { id: userId },
+            omit: { password: true }
+        });
+
+        if(userId !== user.id) {
+            throw new ApiError( httpStatus.FORBIDDEN, "Forbidden: You can update only your own profile.");
+        }
 
         const updateProfile = await prisma.users.update({
             where : { id: userId },
