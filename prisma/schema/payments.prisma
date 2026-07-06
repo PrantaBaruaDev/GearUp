@@ -1,0 +1,17 @@
+model Payments {
+    id            String        @id @default(uuid())
+    userId          String      @unique
+    rentalOrderId String        @unique
+    stripeCustomerId String     @unique
+    stripeTransactionId String       @unique
+    amount        Decimal
+    paidAt        DateTime?
+    status        PaymentStatus @default(PENDING)
+    createdAt     DateTime      @default(now())  @db.Timestamp(6)
+    updatedAt     DateTime      @updatedAt  @db.Timestamp(6)
+
+    user        Users @relation(fields: [userId], references:[id], onDelete : Cascade)
+    rentalOrder   RentalOrders   @relation(fields: [rentalOrderId], references: [id], onDelete : Cascade)
+
+    @@map("payments")
+}

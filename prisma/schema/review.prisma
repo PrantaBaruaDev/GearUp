@@ -1,0 +1,13 @@
+model Reviews {
+    id         String   @id @default(uuid())
+    rating     Int      /// @postgresql.check("rating >= 1 AND rating <= 5")
+    comment    String?
+    customerId String
+    gearItemId String
+    createdAt  DateTime @default(now())
+
+    gearItem   GearItems @relation(fields: [gearItemId], references: [id], onDelete : Cascade)
+    customer   Users     @relation(fields: [customerId], references: [id], onDelete : Cascade)
+
+    @@map("reviews")
+}

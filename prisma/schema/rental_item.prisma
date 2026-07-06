@@ -1,0 +1,11 @@
+model RentalItems {
+    id            String      @id @default(uuid())
+    rentalOrderId String
+    gearItemId    String
+    quantity      Int         @default(1)
+
+    gearItem      GearItems    @relation(fields: [gearItemId], references: [id], onDelete: Cascade)
+    rentalOrder   RentalOrders @relation(fields: [rentalOrderId], references: [id], onDelete: Cascade)
+    
+    @@map("rental_items")
+}

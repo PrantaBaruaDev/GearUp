@@ -1,0 +1,8 @@
+model Category {
+  id        String     @id @default(uuid())
+  name      String     @unique
+  createdAt DateTime   @default(now())
+
+  gearItems GearItems[]
+  @@map("category")
+}

@@ -1,0 +1,16 @@
+model RentalOrders {
+    id          String       @id @default(uuid())
+    customerId  String
+    startDate   DateTime     @db.Date
+    endDate     DateTime     @db.Date
+    totalPrice  Decimal
+    status      OrderStatus  @default(PENDING)
+    createdAt   DateTime     @default(now())  @db.Timestamp(6)
+    updatedAt   DateTime     @updatedAt       @db.Timestamp(6)
+
+    rentalItems RentalItems[]
+    payment     Payments?
+    customer    Users         @relation(fields: [customerId], references: [id], onDelete : Cascade)
+
+    @@map("rental_orders")
+}
