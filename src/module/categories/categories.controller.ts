@@ -11,7 +11,7 @@ const getAllCategory = catchAsync( async(req: Request, res: Response, next: Next
     sendResponse(res, {
         success: true,
         statusCode: httpStatus.OK,
-        message: "Property created successfully",
+        message: "Category retrieved successfully",
         data: categories,
     });
 })
@@ -22,7 +22,7 @@ const getSingleCategoryByID = catchAsync( async(req: Request, res: Response, nex
     sendResponse(res, {
         success: true,
         statusCode: httpStatus.OK,
-        message: "Property created successfully",
+        message: "Category created successfully",
         data: categories,
     });
 })
@@ -38,7 +38,7 @@ const createCategory = catchAsync( async(req: Request, res: Response, next: Next
     sendResponse(res, {
         success: true,
         statusCode: httpStatus.CREATED,
-        message: "Property created successfully",
+        message: "Category created successfully",
         data: categories,
     });
 })
