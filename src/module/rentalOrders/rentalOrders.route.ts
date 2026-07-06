@@ -5,12 +5,9 @@ import { RentalOrdersController } from "./rentalOrders.controller";
 
 const router = Router();
 
-router.get("/", auth(Role.PROVIDER, Role.ADMIN), RentalOrdersController.getAllRentalOrders);
+router.get("/", auth(Role.CUSTOMER, Role.PROVIDER, Role.ADMIN), RentalOrdersController.getAllRentalOrders);
 router.get("/:id", auth(Role.CUSTOMER, Role.PROVIDER, Role.ADMIN), RentalOrdersController.getSingleRentalOrdersByID);
 
-router.post("/:id", auth(Role.CUSTOMER, Role.PROVIDER), RentalOrdersController.createRentalOrders);
-router.patch("/:id", auth(Role.PROVIDER), RentalOrdersController.updateRentalOrder);
-router.delete("/:id", auth(Role.PROVIDER), RentalOrdersController.deleteRentalOrder);
-
+router.post("/", auth(Role.CUSTOMER, Role.PROVIDER), RentalOrdersController.createRentalOrders);
 
 export const RentalOrdersRoute = router;
