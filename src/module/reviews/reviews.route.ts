@@ -5,9 +5,9 @@ import { ReviewsController } from "./reviews.controller";
 
 const router = Router();
 
+router.get("/", auth(Role.CUSTOMER, Role.PROVIDER, Role.ADMIN), ReviewsController.getAllReviews);
+router.get("/:id", auth(Role.CUSTOMER, Role.PROVIDER, Role.ADMIN), ReviewsController.getSingleReview);
 router.post("/", auth(Role.CUSTOMER, Role.PROVIDER, Role.ADMIN), ReviewsController.createReview);
 router.patch("/:id", auth(Role.ADMIN), ReviewsController.updateReview);
-router.delete("/:id", auth(Role.PROVIDER, Role.ADMIN), ReviewsController.deleteReview);
-
 
 export const ReviewsRoute = router;
