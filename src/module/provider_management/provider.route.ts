@@ -10,6 +10,7 @@ import { ReviewsController } from "../reviews/reviews.controller";
 
 const router = Router();
 
+router.get("/gear", auth(Role.PROVIDER), GearsController.getAllOwnProviderGearDetailsById);
 router.get("/gear/:id", auth(Role.PROVIDER), GearsController.getSingleGearById);
 router.post("/gear", auth(Role.PROVIDER), GearsController.createGearItem);
 router.patch("/gear/:id", auth(Role.PROVIDER), GearsController.updateGearItem);
