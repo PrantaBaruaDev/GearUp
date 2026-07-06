@@ -36,7 +36,7 @@ class CategoriesService{
         return categories;
     }
 
-    async isAdminRoleCheck() {
+    async isAdminRoleCheck(userId: string) {
         const user = await UserService.getUserById(userId);
         if (user.role !== Role.ADMIN) {
             throw new ApiError(httpStatus.FORBIDDEN, "Forbidden: Only Admin can modify categories!");
