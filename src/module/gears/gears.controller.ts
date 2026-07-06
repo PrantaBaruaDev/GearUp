@@ -3,12 +3,25 @@ import httpStatus from "http-status";
 import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
 import GearService from "./gears.service";
-import { IUpdateGearItemsPayload } from "./gears.interface";
 
 const getAllGearsDetails = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
         const query = req.query;
         const gears = await GearService.getGearDetails(query);
+
+        sendResponse(res, {
+            success: true,
+            statusCode: httpStatus.OK,
+            message: "Gears fetched successfully",
+            data: gears,
+        });
+    }
+);
+
+const getAllOwnProviderGearDetailsById = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+        const userId = req.user?.id as string;
+        const gears = await GearService.getAllOwnProviderGearDetailsById(userId);
 
         sendResponse(res, {
             success: true,
@@ -81,6 +94,7 @@ const deleteGearItem = catchAsync(
 
 export const GearsController = {
     getAllGearsDetails,
+    getAllOwnProviderGearDetailsById,
     getSingleGearById,
     createGearItem,
     updateGearItem,

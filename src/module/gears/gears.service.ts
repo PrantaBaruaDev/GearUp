@@ -52,6 +52,24 @@ class GearService {
         });
     }
 
+    async getAllOwnProviderGearDetailsById(providerId: string) {
+        const gear = await prisma.gearItems.findMany({
+            where: { providerId },
+            include: {
+                category: true,
+                provider: {
+                    select: { id: true, name: true, email: true },
+                },
+            },
+        });
+
+        if (!gear) {
+            throw new ApiError(httpStatus.NOT_FOUND, "Gear not found.");
+        }
+
+        return gear;
+    }
+
     async getSinglePropertyById(id: string) {
         const gear = await prisma.gearItems.findUnique({
             where: { id },
