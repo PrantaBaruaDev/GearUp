@@ -9,6 +9,7 @@ import { RentalOrdersController } from "../rentalOrders/rentalOrders.controller"
 import { PaymentsController } from "../payments/payments.controller";
 import { CategoriesController } from "../categories/categories.controller";
 import { RentalItemsController } from "../rentalItems/rentalItems.controller";
+import { ReviewsController } from "../reviews/reviews.controller";
 
 const router = Router();
 
@@ -18,9 +19,9 @@ router.patch("/users/:id", auth(Role.ADMIN), UserController.updateUserStatusPatc
 
 router.get("/gear", auth(Role.ADMIN), GearsController.getAllGearsDetails);
 router.get("/gear/:id", auth(Role.ADMIN), GearsController.getSingleGearById);
-router.post("/gear", auth(Role.ADMIN), GearsController.createGear);
-router.patch("/gear/:id", auth(Role.ADMIN), GearsController.updateGear);
-router.delete("/gear/:id", auth(Role.ADMIN), GearsController.deleteGear);
+router.post("/gear", auth(Role.ADMIN), GearsController.createGearItem);
+router.patch("/gear/:id", auth(Role.ADMIN), GearsController.updateGearItem);
+router.delete("/gear/:id", auth(Role.ADMIN), GearsController.deleteGearItem);
 
 
 router.get("/rentals", auth(Role.ADMIN), RentalOrdersController.getAllRentalOrders);
@@ -38,6 +39,7 @@ router.delete("/categories/:id", auth(Role.ADMIN), CategoriesController.deleteCa
 router.patch("/payments/:id", auth(Role.ADMIN), PaymentsController.updatePayments);
 router.delete("/payments/:id", auth(Role.ADMIN), PaymentsController.deletePayments);
 
+router.delete("/review/:id", auth( Role.ADMIN), ReviewsController.deleteReview);
 
 export const AdminManagementRouter = router;
 
