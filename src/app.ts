@@ -33,11 +33,11 @@ app.get("/",(req : Request, res : Response) => {
 });
 
 app.use("/api/auth", AuthRouter);
-// app.use("/api/admin", AdminManagementRouter);
+app.use("/api/admin", AdminManagementRouter);
 app.use("/api/users", UserRouter);
 // app.use("/api/provider", ProviderManagementRouter);
 app.use("/api/gear", GearsRouter);
-// app.use("/api/categories", CategoriesRoute);
+app.use("/api/categories", CategoriesRoute);
 // app.use("/api/rental/items", RentalItemsRoute);
 // app.use("/api/rental/orders", RentalOrdersRoute);
 // app.use("/api/payments", PaymentsRoute);

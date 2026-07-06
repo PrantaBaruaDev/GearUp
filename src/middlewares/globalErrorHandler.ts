@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import httpStatus from "http-status";
 import { Prisma } from "../../generated/prisma/client";
 import { ApiError } from "../errors/ApiError";
+import { config } from "../config";
 
 export const globalErrorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
     console.log("Error Logged: ", err);
@@ -48,6 +49,6 @@ export const globalErrorHandler = (err: any, req: Request, res: Response, next: 
         statusCode: statusCode || httpStatus.INTERNAL_SERVER_ERROR,
         name : errorName,
         message: errorMessage,
-        error: err.stack
+        error:  config.node_env === "development" && err instanceof Error ? err.stack?.split("\n") : undefined,
     })
 }
