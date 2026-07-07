@@ -5,11 +5,9 @@ import { PaymentsController } from "./payments.controller";
 
 const router = Router();
 
-// Public routes
 router.post("/create", auth(Role.CUSTOMER, Role.PROVIDER), PaymentsController.createPayments);
 router.post("/confirm", auth(Role.CUSTOMER, Role.PROVIDER), PaymentsController.confirmPayment);
 router.get("/", auth(Role.CUSTOMER, Role.PROVIDER, Role.ADMIN), PaymentsController.getOwnUserPaymentsHistory);
-router.get("/:id", auth(Role.CUSTOMER), PaymentsController.getSinglePaymentsByID);
-
+router.get("/:id", auth(Role.CUSTOMER, Role.PROVIDER, Role.ADMIN), PaymentsController.getSinglePaymentsByID);
 
 export const PaymentsRoute = router;
