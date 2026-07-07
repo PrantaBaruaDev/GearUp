@@ -31,50 +31,7 @@ const getSingleRentalItemsByID = catchAsync(async (req: Request, res: Response, 
     });
 });
 
-const createRentalItems = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const user = req.user as IUserJWTPayload;
-    const payload = req.body as IRentalItemsPayload;
-    const rentalItem = await RentalItemsService.createRentalItems(user, payload);
-
-    sendResponse(res, {
-        success: true,
-        statusCode: httpStatus.CREATED,
-        message: 'Rental item created successfully.',
-        data: rentalItem
-    });
-});
-
-const updateRentalItem = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const user = req.user as IUserJWTPayload;
-    const { id } = req.params;
-    const payload = req.body as Partial<IRentalItemsPayload>;
-    const rentalItem = await RentalItemsService.updateRentalItem(user, id as string, payload);
-
-    sendResponse(res, {
-        success: true,
-        statusCode: httpStatus.OK,
-        message: 'Rental item updated successfully.',
-        data: rentalItem
-    });
-});
-
-const deleteRentalItem = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const user = req.user as IUserJWTPayload;
-    const { id } = req.params;
-    const rentalItem = await RentalItemsService.deleteRentalItem(user, id as string);
-
-    sendResponse(res, {
-        success: true,
-        statusCode: httpStatus.OK,
-        message: 'Rental item deleted successfully.',
-        data: rentalItem
-    });
-});
-
 export const RentalItemsController = {
-    createRentalItems,
     getAllRentalItems,
     getSingleRentalItemsByID,
-    updateRentalItem,
-    deleteRentalItem
 };

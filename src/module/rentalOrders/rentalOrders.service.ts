@@ -6,125 +6,114 @@ import { prisma } from "../../lib/prisma";
 import { IUserJWTPayload } from "../users/users.interface";
 import { IRentalOrderPayload, IRentalOrderQuery } from "./rentalOrders.interface";
 
+const standardOrderInclude = {
+    rentalItems: {
+        include: { gearItem: true }
+    },
+    payment: true,
+    customer: true
+};
+
 class RentalOrdersService {
-    private async rentDayCalculation (rentalOrder: any ) {
+    private rentDayCalculation(rentalOrder: { startDate: Date | string; endDate: Date | string }): number {
         const start = new Date(rentalOrder.startDate).getTime();
         const end = new Date(rentalOrder.endDate).getTime();
-        
-        // Difference in Milliseconds divided by 1 day in milliseconds
         const millisecondsPerDay = 1000 * 60 * 60 * 24;
-        const totalRentDays = Math.max(1, Math.ceil((end - start) / millisecondsPerDay));
-
-        return {
-            ...rentalOrder,
-            totalRentDays
-        };
+        return Math.max(1, Math.ceil((end - start) / millisecondsPerDay));
     }
+
+    private calculateOrderPrice(
+        requestedItems: Array<{ gearItemId: string; quantity?: number }>,
+        gearItemsFromDb: Array<{ id: string; pricePerDay: Prisma.Decimal | number }>,
+        rentalDays: number
+    ): number {
+        const gearItemsMap = new Map(gearItemsFromDb.map((item) => [item.id, item]));
+
+        return requestedItems.reduce((sum, item) => {
+            const gearItem = gearItemsMap.get(item.gearItemId);
+            if (!gearItem) return sum;
+
+            const quantity = item.quantity ?? 1;
+            const pricePerDay = Number(gearItem.pricePerDay.toString());
+            
+            return sum + (pricePerDay * rentalDays * quantity);
+        }, 0);
+    }
+
     private async getRentalOrder(id: string) {
         const rentalOrder = await prisma.rentalOrders.findUnique({
             where: { id },
-            include: {
-                rentalItems: {
-                    include: {
-                        gearItem: true
-                    }
-                },
-                payment: true,
-                customer: true
-            }
+            include: standardOrderInclude
         });
 
         if (!rentalOrder) {
             throw new ApiError(httpStatus.NOT_FOUND, "Rental order not found.");
         }
 
-        const rentOrder = this.rentDayCalculation(rentalOrder);
-
-        return rentOrder;
+        return {
+            ...rentalOrder,
+            totalRentDays: this.rentDayCalculation(rentalOrder)
+        };
     }
 
     private async verifyProviderOwnsOrder(providerId: string, orderId: string) {
         const rentalItem = await prisma.rentalItems.findFirst({
             where: {
                 rentalOrderId: orderId,
-                gearItem: {
-                    providerId
-                }
+                gearItem: { providerId }
             }
         });
-
         if (!rentalItem) {
             throw new ApiError(httpStatus.FORBIDDEN, "Forbidden: You do not own this rental order.");
         }
     }
 
     private async verifyCustomerOwnsOrder(customerId: string, orderId: string) {
-        const rentalOrder = await prisma.rentalOrders.findUnique({
-            where: { id: orderId }
-        });
-
-        if (!rentalOrder) {
-            throw new ApiError(httpStatus.NOT_FOUND, "Rental order not found.");
-        }
-
+        const rentalOrder = await prisma.rentalOrders.findUnique({ where: { id: orderId } });
+        if (!rentalOrder) throw new ApiError(httpStatus.NOT_FOUND, "Rental order not found.");
+        
         if (rentalOrder.customerId !== customerId) {
             throw new ApiError(httpStatus.FORBIDDEN, "Forbidden: You do not own this rental order.");
         }
     }
 
     async getAllRentalOrders(user: IUserJWTPayload) {
-        const include = {
-            rentalItems: {
-                include: {
-                    gearItem: true
-                }
-            },
-            payment: true,
-            customer: true
-        };
-
         let orders: any[] = [];
 
-        // 1. Fetch data based on User Roles 
         if (user.role === Role.ADMIN) {
-            orders = await prisma.rentalOrders.findMany({ include });
+            orders = await prisma.rentalOrders.findMany({ include: standardOrderInclude });
         } else if (user.role === Role.PROVIDER) {
             orders = await prisma.rentalOrders.findMany({
                 where: {
-                    rentalItems: {
-                        some: {
-                            gearItem: {
-                                providerId: user.id
-                            }
-                        }
+                    rentalItems: { 
+                        some: { 
+                            gearItem: { 
+                                providerId: user.id 
+                            } 
+                        } 
                     }
                 },
-                include
+                include: standardOrderInclude,
+                orderBy: { createdAt: "desc" }
             });
         } else {
             orders = await prisma.rentalOrders.findMany({
-                where: {
-                    customerId: user.id
-                },
-                include
+                where: { customerId: user.id },
+                include: standardOrderInclude,
+                orderBy: { createdAt: "desc" }
             });
         }
 
-        // 2. Map the day calculation with promise
-        const ordersWithDuration = await Promise.all(
-            orders.map((order) => this.rentDayCalculation(order))
-        );
-
-        return ordersWithDuration;
+        return orders.map((order) => ({
+            ...order,
+            totalRentDays: this.rentDayCalculation(order)
+        }));
     }
 
     async getSingleRentalOrdersByID(user: IUserJWTPayload, id: IRentalOrderQuery["id"]) {
         const rentalOrder = await this.getRentalOrder(id as string);
 
-        if (user.role === Role.ADMIN) {
-            return rentalOrder;
-        }
-
+        if (user.role === Role.ADMIN) return rentalOrder;
         if (user.role === Role.PROVIDER) {
             await this.verifyProviderOwnsOrder(user.id, rentalOrder.id);
             return rentalOrder;
@@ -142,82 +131,46 @@ class RentalOrdersService {
         const startDate = payload.startDate ? new Date(payload.startDate) : undefined;
         const endDate = payload.endDate ? new Date(payload.endDate) : undefined;
 
-        if (!startDate || !endDate) {
-            throw new ApiError(httpStatus.BAD_REQUEST, "startDate and endDate are required.");
+        if (!startDate || !endDate || Number.isNaN(startDate.getTime()) || Number.isNaN(endDate.getTime())) {
+            throw new ApiError(httpStatus.BAD_REQUEST, "Valid startDate and endDate fields are required.");
         }
-
-        if (Number.isNaN(startDate.getTime()) || Number.isNaN(endDate.getTime())) {
-            throw new ApiError(httpStatus.BAD_REQUEST, "startDate and endDate must be valid dates.");
-        }
-
         if (startDate >= endDate) {
             throw new ApiError(httpStatus.BAD_REQUEST, "endDate must be after startDate.");
         }
 
         const customerId = user.role === Role.CUSTOMER ? user.id : payload.customerId;
+        if (!customerId) throw new ApiError(httpStatus.BAD_REQUEST, "customerId is required.");
 
-        if (!customerId) {
-            throw new ApiError(httpStatus.BAD_REQUEST, "customerId is required when a provider creates an order.");
-        }
+        const customer = await prisma.users.findUnique({ where: { id: customerId } });
+        if (!customer) throw new ApiError(httpStatus.NOT_FOUND, "Customer not found.");
 
-        const customer = await prisma.users.findUnique({
-            where: { id: customerId }
-        });
-
-        if (!customer) {
-            throw new ApiError(httpStatus.NOT_FOUND, "Customer not found.");
-        }
-
-        const requestedItems = (payload.rentalItems?.length
+        const requestedItems = payload.rentalItems?.length
             ? payload.rentalItems
-            : payload.gearItemsIds?.map((gearItemId) => ({ gearItemId, quantity: 1 })) ?? []);
+            : payload.gearItemsIds?.map((gearItemId) => ({ gearItemId, quantity: 1 })) ?? [];
 
         if (requestedItems.length === 0) {
-            throw new ApiError(httpStatus.BAD_REQUEST, "At least one gear item is required to create an order.");
+            throw new ApiError(httpStatus.BAD_REQUEST, "At least one gear item is required.");
         }
 
-        const gearItemIds = requestedItems.map((item) => item.gearItemId);
         const existingGearItems = await prisma.gearItems.findMany({
-            where: {
-                id: {
-                    in: gearItemIds
-                }
-            },
-            select: {
-                id: true,
-                pricePerDay: true,
-                availableStock: true
-            }
+            where: { id: { in: requestedItems.map((item) => item.gearItemId) } }
         });
 
-        const existingGearItemIds = new Set(existingGearItems.map((item) => item.id));
-        const missingGearItemIds = gearItemIds.filter((id) => !existingGearItemIds.has(id));
-
-        if (missingGearItemIds.length > 0) {
-            throw new ApiError(httpStatus.NOT_FOUND, `Gear item(s) not found: ${missingGearItemIds.join(", ")}`);
+        if (existingGearItems.length !== requestedItems.length) {
+            throw new ApiError(httpStatus.NOT_FOUND, "One or more selected gear items could not be validated.");
         }
 
-        const rentalDays = Math.max(1, Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)));
-        const gearItemsById = new Map(existingGearItems.map((item) => [item.id, item]));
-        const insufficientStockItems = requestedItems.filter((item) => {
-            const gearItem = gearItemsById.get(item.gearItemId);
-            return gearItem && gearItem.availableStock < (item.quantity ?? 1);
-        });
-
-        if (insufficientStockItems.length > 0) {
-            throw new ApiError(httpStatus.BAD_REQUEST, "One or more selected gear items do not have enough available stock.");
-        }
-
-        const calculatedTotalPrice = requestedItems.reduce((sum, item) => {
-            const gearItem = gearItemsById.get(item.gearItemId);
-            if (!gearItem) {
-                return sum;
+        const rentalDays = this.rentDayCalculation({ startDate, endDate });
+        
+        const gearItemsMap = new Map(existingGearItems.map(item => [item.id, item]));
+        for (const item of requestedItems) {
+            const gear = gearItemsMap.get(item.gearItemId);
+            if (gear && gear.availableStock < (item.quantity ?? 1)) {
+                throw new ApiError(httpStatus.BAD_REQUEST, `Insufficient available stock for item: ${gear.id}`);
             }
+        }
 
-            const quantity = item.quantity ?? 1;
-            const pricePerDay = Number(gearItem.pricePerDay.toString());
-            return sum + (pricePerDay * rentalDays * quantity);
-        }, 0);
+        const calculatedTotalPrice = this.calculateOrderPrice(requestedItems, existingGearItems, rentalDays);
 
         return prisma.rentalOrders.create({
             data: {
@@ -225,19 +178,15 @@ class RentalOrdersService {
                 startDate,
                 endDate,
                 totalPrice: new Prisma.Decimal(calculatedTotalPrice),
+                status: OrderStatus.PENDING,
                 rentalItems: {
                     create: requestedItems.map((item) => ({
                         gearItemId: item.gearItemId,
                         quantity: item.quantity ?? 1
                     }))
-                },
-                status: payload.status ?? OrderStatus.PENDING
+                }
             },
-            include: {
-                rentalItems: true,
-                payment: true,
-                customer: true
-            }
+            include: standardOrderInclude
         });
     }
 
@@ -247,53 +196,66 @@ class RentalOrdersService {
         }
 
         const rentalOrder = await this.getRentalOrder(id as string);
-
         if (user.role === Role.PROVIDER) {
             await this.verifyProviderOwnsOrder(user.id, rentalOrder.id);
         }
 
-        const updates: Record<string, unknown> = {};
+        return await prisma.$transaction(async (tx) => {
+            const updates: Record<string, unknown> = {};
 
-        if (payload.startDate !== undefined) {
-            const startDate = new Date(payload.startDate);
-            if (Number.isNaN(startDate.getTime())) {
-                throw new ApiError(httpStatus.BAD_REQUEST, "startDate must be a valid date.");
+            const startDate = payload.startDate ? new Date(payload.startDate) : new Date(rentalOrder.startDate);
+            const endDate = payload.endDate ? new Date(payload.endDate) : new Date(rentalOrder.endDate);
+
+            if (Number.isNaN(startDate.getTime()) || Number.isNaN(endDate.getTime()) || startDate >= endDate) {
+                throw new ApiError(httpStatus.BAD_REQUEST, "Invalid timeline date configuration values provided.");
             }
-            updates.startDate = startDate;
-        }
 
-        if (payload.endDate !== undefined) {
-            const endDate = new Date(payload.endDate);
-            if (Number.isNaN(endDate.getTime())) {
-                throw new ApiError(httpStatus.BAD_REQUEST, "endDate must be a valid date.");
+            if (payload.startDate !== undefined) updates.startDate = startDate;
+            if (payload.endDate !== undefined) updates.endDate = endDate;
+            if (payload.status !== undefined) updates.status = payload.status;
+
+            const rentDays = this.rentDayCalculation({ startDate, endDate });
+
+            if (payload.rentalItems && payload.rentalItems.length > 0) {
+                await tx.rentalItems.deleteMany({ where: { rentalOrderId: rentalOrder.id } });
+
+                const gearItemsFromDb = await tx.gearItems.findMany({
+                    where: { id: { in: payload.rentalItems.map((i) => i.gearItemId) } }
+                });
+
+                if (gearItemsFromDb.length !== payload.rentalItems.length) {
+                    throw new ApiError(httpStatus.NOT_FOUND, "Some requested gear items were missing from stock.");
+                }
+
+                const updatedTotalPrice = this.calculateOrderPrice(payload.rentalItems, gearItemsFromDb, rentDays);
+                updates.totalPrice = new Prisma.Decimal(updatedTotalPrice);
+
+                updates.rentalItems = {
+                    create: payload.rentalItems.map((item) => ({
+                        gearItemId: item.gearItemId,
+                        quantity: item.quantity ?? 1
+                    }))
+                };
+            } else if (payload.startDate !== undefined || payload.endDate !== undefined) {
+                const formattedExistingItems = rentalOrder.rentalItems.map((item: any) => ({
+                    gearItemId: item.gearItemId,
+                    quantity: item.quantity
+                }));
+                const gearItemsFromDb = rentalOrder.rentalItems.map((item: any) => item.gearItem);
+
+                const updatedTotalPrice = this.calculateOrderPrice(formattedExistingItems, gearItemsFromDb, rentDays);
+                updates.totalPrice = new Prisma.Decimal(updatedTotalPrice);
             }
-            updates.endDate = endDate;
-        }
 
-        if (payload.totalPrice !== undefined) {
-            const totalPrice = Number(payload.totalPrice);
-            if (Number.isNaN(totalPrice) || totalPrice < 0) {
-                throw new ApiError(httpStatus.BAD_REQUEST, "totalPrice must be a non-negative number.");
+            if (payload.totalPrice !== undefined && !updates.totalPrice) {
+                updates.totalPrice = new Prisma.Decimal(Number(payload.totalPrice));
             }
-            updates.totalPrice = totalPrice;
-        }
 
-        if (payload.status !== undefined) {
-            updates.status = payload.status;
-        }
-
-        if (Object.keys(updates).length === 0) {
-            throw new ApiError(httpStatus.BAD_REQUEST, "No valid fields were provided for update.");
-        }
-
-        return prisma.rentalOrders.update({
-            where: { id: id as string },
-            data: updates,
-            include: {
-                rentalItems: true,
-                payment: true,
-                customer: true
-            }
+            return tx.rentalOrders.update({
+                where: { id: id as string },
+                data: updates,
+                include: standardOrderInclude
+            });
         });
     }
 
@@ -303,13 +265,13 @@ class RentalOrdersService {
         }
 
         const rentalOrder = await this.getRentalOrder(id as string);
-
         if (user.role === Role.PROVIDER) {
             await this.verifyProviderOwnsOrder(user.id, rentalOrder.id);
         }
 
-        return prisma.rentalOrders.delete({
-            where: { id: id as string }
+        return await prisma.$transaction(async (tx) => {
+            await tx.rentalItems.deleteMany({ where: { rentalOrderId: rentalOrder.id } });
+            return tx.rentalOrders.delete({ where: { id: rentalOrder.id } });
         });
     }
 }
