@@ -37,8 +37,10 @@ class GearService {
             }
         }
 
-        if (availableOnly === "true") {
-            where.availableStock = { gt: 0 };
+        if (availableOnly === "false") {
+            where.availableStock = { gte: 0 }; 
+        } else {
+            where.availableStock = { gt: 0 };  
         }
 
         return prisma.gearItems.findMany({
@@ -50,6 +52,65 @@ class GearService {
                 },
             },
         });
+    }
+
+    async getGearDetailsForAdmin(query: IGearItemsQuery) {
+        const { title, brand, categoryId, minPrice, maxPrice, availableOnly, providerId, page = 1, limit = 10 } = query;
+
+        const where: Record<string, any> = {};
+
+        // Search & Auditing Filters
+        if (title?.trim()) {
+            where.title = { contains: title.trim(), mode: "insensitive" };
+        }
+        if (brand?.trim()) {
+            where.brand = { contains: brand.trim(), mode: "insensitive" };
+        }
+        if (categoryId?.trim()) {
+            where.categoryId = categoryId.trim();
+        }
+        if (providerId?.trim()) {
+            where.providerId = providerId.trim(); 
+        }
+        if (minPrice !== undefined || maxPrice !== undefined) {
+            where.pricePerDay = {};
+            if (minPrice !== undefined) where.pricePerDay.gte = Number(minPrice);
+            if (maxPrice !== undefined) where.pricePerDay.lte = Number(maxPrice);
+        }
+
+        if (availableOnly === "false") {
+            where.availableStock = 0;  
+        } else if (availableOnly === "true") {
+            where.availableStock = { gt: 0 }; 
+        }
+
+        const parsedPage = Math.max(1, Number(page));
+        const parsedLimit = Math.max(1, Number(limit));
+        const skip = (parsedPage - 1) * parsedLimit;
+
+        const [data, total] = await prisma.$transaction([
+            prisma.gearItems.findMany({
+                where,
+                skip,
+                take: parsedLimit,
+                include: {
+                    category: true,
+                    provider: {
+                        select: { id: true, name: true, email: true }, // Admin sees provider contact info
+                    },
+                    _count: {
+                        select: { rentalItems: true, reviews: true } // Admin data aggregates
+                    }
+                },
+                orderBy: { createdAt: "desc" }
+            }),
+            prisma.gearItems.count({ where })
+        ]);
+
+        return {
+            meta: { page: parsedPage, limit: parsedLimit, total, totalPages: Math.ceil(total / parsedLimit) },
+            data
+        };
     }
 
     async getAllOwnProviderGearDetailsById(providerId: string) {

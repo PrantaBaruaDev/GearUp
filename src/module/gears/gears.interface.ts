@@ -5,6 +5,9 @@ export interface IGearItemsQuery {
     minPrice?: string | number;
     maxPrice?: string | number;
     availableOnly?: string;
+    providerId: string; 
+    page: string | number; 
+    limit: string | number;
 }
 
 export interface ICreateGearItemsPayload {

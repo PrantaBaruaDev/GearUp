@@ -3,11 +3,27 @@ import httpStatus from "http-status";
 import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
 import GearService from "./gears.service";
+import { IGearItemsQuery } from "./gears.interface";
 
 const getAllGearsDetails = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
-        const query = req.query;
+        const query = req.query as unknown as IGearItemsQuery;
         const gears = await GearService.getGearDetails(query);
+
+        sendResponse(res, {
+            success: true,
+            statusCode: httpStatus.OK,
+            message: "Gears fetched successfully",
+            data: gears,
+        });
+    }
+);
+
+
+const getGearDetailsForAdmin = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+        const query = req.query as unknown as IGearItemsQuery;
+        const gears = await GearService.getGearDetailsForAdmin(query);
 
         sendResponse(res, {
             success: true,
@@ -94,6 +110,7 @@ const deleteGearItem = catchAsync(
 
 export const GearsController = {
     getAllGearsDetails,
+    getGearDetailsForAdmin,
     getAllOwnProviderGearDetailsById,
     getSingleGearById,
     createGearItem,
