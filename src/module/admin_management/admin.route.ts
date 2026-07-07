@@ -29,14 +29,11 @@ router.delete("/rentals/:id", auth(Role.ADMIN), RentalOrdersController.deleteRen
 
 
 router.get("/rentals/items", auth(Role.ADMIN), RentalItemsController.getAllRentalItems);
-router.delete("/rentals/items/:id", auth(Role.ADMIN), RentalItemsController.deleteRentalItem);
-
 
 router.post("/categories/", auth(Role.ADMIN), CategoriesController.createCategory);
 router.patch("/categories/:id", auth(Role.ADMIN), CategoriesController.updateCategory);
 router.delete("/categories/:id", auth(Role.ADMIN), CategoriesController.deleteCategory);
 
-router.patch("/payments/:id", auth(Role.ADMIN), PaymentsController.updatePayments);
 router.delete("/payments/:id", auth(Role.ADMIN), PaymentsController.deletePayments);
 
 router.delete("/review/:id", auth( Role.ADMIN), ReviewsController.deleteReview);
