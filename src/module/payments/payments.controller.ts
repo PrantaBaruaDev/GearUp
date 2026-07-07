@@ -57,20 +57,6 @@ const createPayments = catchAsync(async (req: Request, res: Response, next: Next
     });
 });
 
-const updatePayments = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const user = req.user as IUserJWTPayload;
-    const { id } = req.params;
-    const payload = req.body as Partial<ICreatePaymentPayload>;
-    const payment = await PaymentsService.updatePayment(user, id as string, payload);
-
-    sendResponse(res, {
-        success: true,
-        statusCode: httpStatus.OK,
-        message: "Payment updated successfully.",
-        data: payment
-    });
-});
-
 const deletePayments = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const user = req.user as IUserJWTPayload;
     const { id } = req.params;
@@ -88,7 +74,7 @@ const handleStripeWebhook = catchAsync(async (req: Request, res: Response, next:
     const signature = req.headers["stripe-signature"];
     const signatureValue = Array.isArray(signature) ? signature[0] : signature;
 
-    const payment = await PaymentsService.handleStripeWebhook(req.body as Buffer, signatureValue);
+    const payment = await PaymentsService.handleStripeWebhook(req.body as Buffer, signatureValue as string);
 
     sendResponse(res, {
         success: true,
@@ -103,7 +89,6 @@ export const PaymentsController = {
     getSinglePaymentsByID,
     confirmPayment,
     createPayments,
-    updatePayments,
     deletePayments,
     handleStripeWebhook
 };
