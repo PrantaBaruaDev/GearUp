@@ -8,7 +8,7 @@ const router = Router();
 router.get("/", auth(Role.CUSTOMER, Role.PROVIDER, Role.ADMIN), RentalItemsController.getAllRentalItems);
 router.get("/:id", auth(Role.CUSTOMER, Role.PROVIDER, Role.ADMIN), RentalItemsController.getSingleRentalItemsByID);
 
-router.post("/:id", auth(Role.CUSTOMER, Role.PROVIDER, Role.ADMIN), RentalItemsController.createRentalItems);
+router.post("/", auth(Role.CUSTOMER, Role.PROVIDER, Role.ADMIN), RentalItemsController.createRentalItems);
 router.patch("/:id", auth(Role.PROVIDER, Role.ADMIN), RentalItemsController.updateRentalItem);
 router.delete("/:id", auth(Role.PROVIDER, Role.ADMIN), RentalItemsController.deleteRentalItem);
 

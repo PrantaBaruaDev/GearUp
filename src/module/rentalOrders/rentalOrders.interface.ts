@@ -14,16 +14,22 @@ export interface IRentalOrderQuery {
     updatedAt: Date;
 }
 
+export interface IRentalItemsCreatePayload {
+    gearItemId: string;
+    quantity?: number;
+}
+
 export interface IRentalOrderPayload {
     customerId?: string;
     startDate: Date | string;
     endDate: Date | string;
     totalPrice?: number | string;
     status?: OrderStatus;
+    gearItemsIds?: string[];
+    rentalItems?: IRentalItemsCreatePayload[];
 }
 
 export interface RentalOrders extends IRentalOrderQuery {
     rentalItems?: IRentalItemsQuery[];
     payment?: IPaymentsQuery;
 }
-
