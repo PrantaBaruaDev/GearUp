@@ -17,7 +17,7 @@ router.get("/users", auth(Role.ADMIN), UserController.getAllUsers);
 router.patch("/users/:id", auth(Role.ADMIN), UserController.updateUserStatusPatchByAdmin);
 
 
-router.get("/gear", auth(Role.ADMIN), GearsController.getAllGearsDetails);
+router.get("/gear", auth(Role.ADMIN), GearsController.getGearDetailsForAdmin);
 router.get("/gear/:id", auth(Role.ADMIN), GearsController.getSingleGearById);
 router.post("/gear", auth(Role.ADMIN), GearsController.createGearItem);
 router.patch("/gear/:id", auth(Role.ADMIN), GearsController.updateGearItem);
