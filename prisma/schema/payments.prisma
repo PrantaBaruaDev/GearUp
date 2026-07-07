@@ -2,11 +2,11 @@ model Payments {
     id            String        @id @default(uuid())
     userId          String      @unique
     rentalOrderId String        @unique
-    stripeCustomerId String     @unique
-    stripeTransactionId String       @unique
     amount        Decimal
     paidAt        DateTime?
     status        PaymentStatus @default(PENDING)
+    stripeCustomerId String?   
+    stripeTransactionId String?  
     createdAt     DateTime      @default(now())  @db.Timestamp(6)
     updatedAt     DateTime      @updatedAt  @db.Timestamp(6)
 

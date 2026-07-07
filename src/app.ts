@@ -12,6 +12,7 @@ import { RentalItemsRoute } from "./module/rentalItems/rentalItems.route";
 import { RentalOrdersRoute } from "./module/rentalOrders/rentalOrders.route";
 import { ProviderManagementRouter } from "./module/provider_management/provider.route";
 import { PaymentsRoute } from "./module/payments/payments.route";
+import { PaymentsController } from "./module/payments/payments.controller";
 import { ReviewsRoute } from "./module/reviews/reviews.route";
 import { AdminManagementRouter } from "./module/admin_management/admin.route";
 
@@ -22,8 +23,13 @@ app.use(cors({
     credentials : true,
 }))
 
-app.use(express.json());
 app.use(express.urlencoded({ extended : true }));
+app.post(
+    "/api/payments/webhook",
+    express.raw({ type: "application/json" }),
+    PaymentsController.handleStripeWebhook
+);
+app.use(express.json());
 app.use(cookieParser());
 
 const routeList = [
@@ -41,15 +47,16 @@ const routeList = [
     "Gear Routes",
     "GET /api/gear",
     "GET /api/gear/:id",
-    "GET /api/provider/gear/:id",
     "POST /api/provider/gear",
     "PATCH /api/provider/gear/:id",
     "DELETE /api/provider/gear/:id",
-    "GET /api/admin/gear",
-    "GET /api/admin/gear/:id",
     "POST /api/admin/gear",
     "PATCH /api/admin/gear/:id",
     "DELETE /api/admin/gear/:id",
+
+
+    "GET /api/rentals",
+    "POST /api/rentals",
 
 
 ]
