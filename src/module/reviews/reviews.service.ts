@@ -5,135 +5,94 @@ import { prisma } from "../../lib/prisma";
 import { IUserJWTPayload } from "../users/users.interface";
 import { ICreateReviewPayload, IReviewQuery, IUpdateReviewPayload } from "./reviews.interface";
 
+const baseReviewInclude = {
+    gearItem: true,
+    customer: {
+        omit: { password: true }
+    }
+};
+
 class ReviewsService {
     private async getReview(id: string) {
         const review = await prisma.reviews.findUnique({
             where: { id },
-            include: {
-                gearItem: true,
-                customer: true
-            }
+            include: baseReviewInclude
         });
-
-        if (!review) {
-            throw new ApiError(httpStatus.NOT_FOUND, "Review not found.");
-        }
-
+        if (!review) throw new ApiError(httpStatus.NOT_FOUND, "Review not found.");
         return review;
     }
 
     private validateRating(rating: number) {
         if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
-            throw new ApiError(httpStatus.BAD_REQUEST, "rating must be an integer between 1 and 5.");
+            throw new ApiError(httpStatus.BAD_REQUEST, "Rating must be an integer between 1 and 5.");
         }
     }
 
-    private validateComment(comment?: string) {
-        if (comment === undefined) {
-            return;
-        }
-
+    private validateComment(comment?: string): string | null {
+        if (comment === undefined) return null;
+        
         const trimmedComment = comment.trim();
-
-        if (!trimmedComment) {
-            return null;
-        }
+        if (!trimmedComment) return null;
 
         if (trimmedComment.length > 500) {
-            throw new ApiError(httpStatus.BAD_REQUEST, "comment must be 500 characters or fewer.");
+            throw new ApiError(httpStatus.BAD_REQUEST, "Comment must be 500 characters or fewer.");
         }
-
         return trimmedComment;
     }
 
     async getAllReviews(user: IUserJWTPayload) {
-        const include = {
-            gearItem: true,
-            customer: true
-        };
-
-        if (user.role === Role.ADMIN) {
-            return prisma.reviews.findMany({ include });
-        }
+        let whereCondition = {};
 
         if (user.role === Role.PROVIDER) {
-            return prisma.reviews.findMany({
-                where: {
-                    gearItem: {
-                        providerId: user.id
-                    }
-                },
-                include
-            });
+            whereCondition = { gearItem: { providerId: user.id } };
+        } else if (user.role === Role.CUSTOMER) {
+            whereCondition = { customerId: user.id };
         }
 
         return prisma.reviews.findMany({
-            where: {
-                customerId: user.id
-            },
-            include
+            where: whereCondition,
+            include: baseReviewInclude
         });
     }
 
     async getSingleReview(user: IUserJWTPayload, id: IReviewQuery["id"]) {
         const review = await this.getReview(id as string);
 
-        if (user.role === Role.ADMIN) {
-            return review;
+        const hasAccess = 
+            user.role === Role.ADMIN ||
+            (user.role === Role.PROVIDER && review.gearItem.providerId === user.id) ||
+            (user.role === Role.CUSTOMER && review.customerId === user.id);
+
+        if (!hasAccess) {
+            throw new ApiError(httpStatus.FORBIDDEN, "Forbidden: You do not have access to this review.");
         }
 
-        if (user.role === Role.PROVIDER && review.gearItem.providerId === user.id) {
-            return review;
-        }
-
-        if (user.role === Role.CUSTOMER && review.customerId === user.id) {
-            return review;
-        }
-
-        throw new ApiError(httpStatus.FORBIDDEN, "Forbidden: You do not have access to this review.");
+        return review;
     }
 
     async createReview(user: IUserJWTPayload, payload: ICreateReviewPayload) {
         const { gearItemId, rating, comment } = payload;
-
-        if (!gearItemId) {
-            throw new ApiError(httpStatus.BAD_REQUEST, "gearItemId is required.");
-        }
+        if (!gearItemId) throw new ApiError(httpStatus.BAD_REQUEST, "gearItemId is required.");
 
         this.validateRating(Number(rating));
-
         const normalizedComment = this.validateComment(comment);
 
-        const gearItem = await prisma.gearItems.findUnique({
-            where: { id: gearItemId }
-        });
+        const [gearItem, existingReview] = await Promise.all([
+            prisma.gearItems.findUnique({ where: { id: gearItemId } }),
+            prisma.reviews.findFirst({ where: { customerId: user.id, gearItemId } })
+        ]);
 
-        if (!gearItem) {
-            throw new ApiError(httpStatus.NOT_FOUND, "Gear item not found.");
-        }
-
-        const existingReview = await prisma.reviews.findFirst({
-            where: {
-                customerId: user.id,
-                gearItemId
-            }
-        });
-
-        if (existingReview) {
-            throw new ApiError(httpStatus.BAD_REQUEST, "You have already reviewed this gear item.");
-        }
+        if (!gearItem) throw new ApiError(httpStatus.NOT_FOUND, "Gear item not found.");
+        if (existingReview) throw new ApiError(httpStatus.BAD_REQUEST, "You have already reviewed this gear item.");
 
         return prisma.reviews.create({
             data: {
                 customerId: user.id,
                 gearItemId,
                 rating: Number(rating),
-                comment: normalizedComment ?? null
+                comment: normalizedComment
             },
-            include: {
-                gearItem: true,
-                customer: true
-            }
+            include: baseReviewInclude
         });
     }
 
@@ -151,8 +110,7 @@ class ReviewsService {
         }
 
         if (payload.comment !== undefined) {
-            const normalizedComment = this.validateComment(payload.comment);
-            updates.comment = normalizedComment ?? null;
+            updates.comment = this.validateComment(payload.comment);
         }
 
         if (Object.keys(updates).length === 0) {
@@ -162,10 +120,7 @@ class ReviewsService {
         return prisma.reviews.update({
             where: { id: review.id },
             data: updates,
-            include: {
-                gearItem: true,
-                customer: true
-            }
+            include: baseReviewInclude
         });
     }
 
@@ -180,9 +135,7 @@ class ReviewsService {
             throw new ApiError(httpStatus.FORBIDDEN, "Forbidden: You do not own the gear item for this review.");
         }
 
-        return prisma.reviews.delete({
-            where: { id: review.id }
-        });
+        return prisma.reviews.delete({ where: { id: review.id } });
     }
 }
 
