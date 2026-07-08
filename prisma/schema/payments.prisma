@@ -1,6 +1,6 @@
 model Payments {
     id            String        @id @default(uuid())
-    userId          String      @unique
+    userId          String
     rentalOrderId String        @unique
     amount        Decimal
     paidAt        DateTime?

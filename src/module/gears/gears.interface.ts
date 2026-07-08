@@ -1,7 +1,7 @@
 export interface IGearItemsQuery {
     title?: string;
     brand?: string;
-    categoryId?: string;
+    category?: string;
     minPrice?: string | number;
     maxPrice?: string | number;
     availableOnly?: string;

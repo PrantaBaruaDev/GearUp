@@ -22,7 +22,7 @@ const standardGearInclude = {
 
 class GearService {
     private buildWhereClause(query: IGearItemsQuery): Record<string, any> {
-        const { title, brand, categoryId, minPrice, maxPrice, availableOnly, providerId } = query;
+        const { title, brand, category, minPrice, maxPrice, availableOnly } = query;
         const where: Record<string, any> = {};
 
         if (title?.trim())     
@@ -37,8 +37,13 @@ class GearService {
                 mode: "insensitive" 
             };
 
-        if (categoryId?.trim()) where.categoryId = categoryId.trim();
-        if (providerId?.trim()) where.providerId = providerId.trim();
+        if (category?.trim()) 
+            where.category = {
+                name: {
+                    contains: category.trim(), 
+                    mode: "insensitive" 
+                }
+            };
 
         if (minPrice !== undefined || maxPrice !== undefined) {
             where.pricePerDay = {};
@@ -91,7 +96,12 @@ class GearService {
                 take: parsedLimit,
                 include: {
                     ...standardGearInclude,
-                    _count: { select: { rentalItems: true, reviews: true } }
+                    _count: { 
+                        select: { 
+                            rentalItems: true,
+                            reviews: true 
+                        } 
+                    }
                 },
                 orderBy: { createdAt: "desc" }
             }),

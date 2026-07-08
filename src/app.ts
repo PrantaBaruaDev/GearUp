@@ -34,7 +34,7 @@ app.use(cookieParser());
 
 const routeList = [
     // Category Routes
-    "<b>Category Route</b>",
+    "<h2>Category Route</h2>",
     "POST /api/admin/categories",
     "GET /api/categories",
     "GET /api/categories/:ID",
@@ -44,7 +44,7 @@ const routeList = [
     "",
 
     // Gear Item Routes
-    "<b>Gear Routes</b>",
+    "<h2>Gear Routes</h2>",
     "GET    /api/gear",
     "GET    /api/gear/:id",
     "GET    /api/provider/gear",
@@ -58,7 +58,7 @@ const routeList = [
     "",
 
     // Rentals Orders
-    "<b>Rentals Orders</b>",
+    "<h2>Rentals Orders</h2>",
     "GET    /api/rentals",
     "GET    /api/rentals/:id",
     "POST   /api/rentals",
@@ -72,7 +72,7 @@ const routeList = [
     "",
 
     // Rentals Items
-    "<b>Rentals Items</b>",
+    "<h2>Rentals Items</h2>",
     "GET    /", 
     "GET    /:id", 
     "GET    /api/admin/rentals/items", 
@@ -80,7 +80,7 @@ const routeList = [
     "",
 
     // payments   
-    "<b>Payments</b>", 
+    "<h2>Payments</h2>", 
     "POST   /api/payments/create", 
     "POST   /api/payments/confirm", 
     "GET    /api/payments", 
@@ -89,13 +89,12 @@ const routeList = [
     "",
 
     // Reviews   
-    "<b>Reviews</b>", 
+    "<h2>Reviews</h2>", 
     "GET    /api/reviews",
     "GET    /api/reviews/:id",
     "POST   /api/reviews",
     "PATCH  /api/reviews/:id",
     "DELETE /api/admin/reviews/:id",
-    "DELETE /api/provider/reviews/:id",
 ]
 
 app.get("/", (req: Request, res: Response) => {
