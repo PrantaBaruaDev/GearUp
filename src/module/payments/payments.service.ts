@@ -1,5 +1,6 @@
 import httpStatus from "http-status";
 import Stripe from "stripe";
+import dotenv from "dotenv";
 import { OrderStatus, PaymentStatus, Role } from "../../../generated/prisma/enums";
 import { Prisma } from "../../../generated/prisma/client";
 import { ApiError } from "../../errors/ApiError";
@@ -8,9 +9,26 @@ import { prisma } from "../../lib/prisma";
 import { IUserJWTPayload } from "../users/users.interface";
 import { IConfirmPaymentPayload, ICreatePaymentPayload } from "./payments.interface";
 
-const stripe = new Stripe(config.stripe_secret_key, {
-    apiVersion: "2026-06-24.dahlia"
-});
+let stripeInstance: Stripe | null = null;
+
+function getStripe(): Stripe {
+    if (!stripeInstance) {
+        const secretKey = process.env.STRIPE_SECRET_KEY || config.stripe_secret_key;
+        
+        if (!secretKey) {
+            console.error("❌ CRITICAL: STRIPE_SECRET_KEY is missing from environment variables!");
+            throw new ApiError(
+                httpStatus.INTERNAL_SERVER_ERROR,
+                "Stripe runtime initialization failed: Missing API Key."
+            );
+        }
+
+        stripeInstance = new Stripe(secretKey, {
+            apiVersion: "2026-06-24.dahlia" as any
+        });
+    }
+    return stripeInstance;
+}
 
 const basePaymentInclude = {
     user: { select: { id: true, name: true, email: true, role: true } },
@@ -131,7 +149,7 @@ class PaymentsService {
                 payment: existingPayment, 
                 checkoutUrl: null, 
                 message: "Payment already completed." 
-            };
+                };
         }
 
         const amount = Number(rentalOrder.totalPrice);
@@ -149,6 +167,8 @@ class PaymentsService {
                 status: PaymentStatus.PENDING
             }
         });
+
+        const stripe = getStripe();
 
         const checkoutSession = await stripe.checkout.sessions.create({
             mode: "payment",
@@ -213,6 +233,8 @@ class PaymentsService {
         if (!config.stripe_webhook_secret || !body || !signature) {
             throw new ApiError(httpStatus.BAD_REQUEST, "Stripe webhook parameters missing.");
         }
+
+        const stripe = getStripe();
 
         const event = stripe.webhooks.constructEvent(body, signature, config.stripe_webhook_secret);
 
