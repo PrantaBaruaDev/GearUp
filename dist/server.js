@@ -2052,6 +2052,31 @@ var PaymentsController = {
   handleStripeWebhook
 };
 
+// src/module/provider_management/provider.route.ts
+var router7 = Router7();
+router7.get("/gear", auth(Role.PROVIDER), GearsController.getAllOwnProviderGearDetailsById);
+router7.post("/gear", auth(Role.PROVIDER), GearsController.createGearItem);
+router7.patch("/gear/:id", auth(Role.PROVIDER), GearsController.updateGearItem);
+router7.delete("/gear/:id", auth(Role.PROVIDER), GearsController.deleteGearItem);
+router7.get("/orders", auth(Role.PROVIDER), RentalOrdersController.getAllRentalOrders);
+router7.get("/orders/:id", auth(Role.PROVIDER), RentalOrdersController.getSingleRentalOrdersByID);
+router7.patch("/orders/:id", auth(Role.PROVIDER), RentalOrdersController.updateRentalOrder);
+router7.delete("/orders/:id", auth(Role.PROVIDER), RentalOrdersController.deleteRentalOrder);
+router7.get("/payments/:id", auth(Role.PROVIDER), PaymentsController.getSinglePaymentsByID);
+var ProviderManagementRouter = router7;
+
+// src/module/payments/payments.route.ts
+import { Router as Router8 } from "express";
+var router8 = Router8();
+router8.post("/create", auth(Role.CUSTOMER, Role.PROVIDER), PaymentsController.createPayments);
+router8.post("/confirm", auth(Role.CUSTOMER, Role.PROVIDER), PaymentsController.confirmPayment);
+router8.get("/", auth(Role.CUSTOMER, Role.PROVIDER, Role.ADMIN), PaymentsController.getOwnUserPaymentsHistory);
+router8.get("/:id", auth(Role.CUSTOMER, Role.PROVIDER, Role.ADMIN), PaymentsController.getSinglePaymentsByID);
+var PaymentsRoute = router8;
+
+// src/module/reviews/reviews.route.ts
+import { Router as Router9 } from "express";
+
 // src/module/reviews/reviews.controller.ts
 import httpStatus17 from "http-status";
 
@@ -2148,13 +2173,10 @@ var ReviewsService = class {
     });
   }
   async deleteReview(user, id) {
-    if (user.role !== Role.PROVIDER && user.role !== Role.ADMIN) {
+    if (user.role !== Role.ADMIN) {
       throw new ApiError(httpStatus16.FORBIDDEN, "Forbidden: Only providers and admins can delete reviews.");
     }
     const review = await this.getReview(id);
-    if (user.role === Role.PROVIDER && review.gearItem.providerId !== user.id) {
-      throw new ApiError(httpStatus16.FORBIDDEN, "Forbidden: You do not own the gear item for this review.");
-    }
     return prisma.reviews.delete({ where: { id: review.id } });
   }
 };
@@ -2224,31 +2246,7 @@ var ReviewsController = {
   deleteReview
 };
 
-// src/module/provider_management/provider.route.ts
-var router7 = Router7();
-router7.get("/gear", auth(Role.PROVIDER), GearsController.getAllOwnProviderGearDetailsById);
-router7.post("/gear", auth(Role.PROVIDER), GearsController.createGearItem);
-router7.patch("/gear/:id", auth(Role.PROVIDER), GearsController.updateGearItem);
-router7.delete("/gear/:id", auth(Role.PROVIDER), GearsController.deleteGearItem);
-router7.get("/orders", auth(Role.PROVIDER), RentalOrdersController.getAllRentalOrders);
-router7.get("/orders/:id", auth(Role.PROVIDER), RentalOrdersController.getSingleRentalOrdersByID);
-router7.patch("/orders/:id", auth(Role.PROVIDER), RentalOrdersController.updateRentalOrder);
-router7.delete("/orders/:id", auth(Role.PROVIDER), RentalOrdersController.deleteRentalOrder);
-router7.get("/payments/:id", auth(Role.PROVIDER), PaymentsController.getSinglePaymentsByID);
-router7.delete("/review/:id", auth(Role.PROVIDER), ReviewsController.deleteReview);
-var ProviderManagementRouter = router7;
-
-// src/module/payments/payments.route.ts
-import { Router as Router8 } from "express";
-var router8 = Router8();
-router8.post("/create", auth(Role.CUSTOMER, Role.PROVIDER), PaymentsController.createPayments);
-router8.post("/confirm", auth(Role.CUSTOMER, Role.PROVIDER), PaymentsController.confirmPayment);
-router8.get("/", auth(Role.CUSTOMER, Role.PROVIDER, Role.ADMIN), PaymentsController.getOwnUserPaymentsHistory);
-router8.get("/:id", auth(Role.CUSTOMER, Role.PROVIDER, Role.ADMIN), PaymentsController.getSinglePaymentsByID);
-var PaymentsRoute = router8;
-
 // src/module/reviews/reviews.route.ts
-import { Router as Router9 } from "express";
 var router9 = Router9();
 router9.get("/", auth(Role.CUSTOMER, Role.PROVIDER, Role.ADMIN), ReviewsController.getAllReviews);
 router9.get("/:id", auth(Role.CUSTOMER, Role.PROVIDER, Role.ADMIN), ReviewsController.getSingleReview);
@@ -2347,8 +2345,7 @@ var routeList = [
   "GET    /api/reviews/:id",
   "POST   /api/reviews",
   "PATCH  /api/reviews/:id",
-  "DELETE /api/admin/reviews/:id",
-  "DELETE /api/provider/reviews/:id"
+  "DELETE /api/admin/reviews/:id"
 ];
 app.get("/", (req, res) => {
   const routeItems = routeList.map((value, key) => `<li key=${key}>${value}</li>`).join("");

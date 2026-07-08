@@ -1,0 +1,1225 @@
+{
+  "info": {
+    "_postman_id": "adb81343-ca43-4b39-8194-a1b4ce6897bb",
+    "name": "GearUp",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "33048826"
+  },
+  "item": [
+    {
+      "name": "auth",
+      "item": [
+        {
+          "name": "admin",
+          "item": [
+            {
+              "name": "get all user",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "\r\n//   {\r\n//     \"title\": \"Ultralight 2-Person Camping Tent\",\r\n//     \"description\": \"Waterproof, lightweight backpacking tent with aluminum poles and dual vestibules. Perfect for 3-season hiking.\",\r\n//     \"brand\": \"Deuter\",\r\n//     \"pricePerDay\": 15.50,\r\n//     \"stock\": 5,\r\n//     \"availableStock\": 5,\r\n//     \"categoryId\": \"0e55a1f6-19c9-4a77-b2bc-42ba6269d996\"\r\n//   }\r\n\r\n  {\r\n    \"title\": \"Marmot 0°F Down Sleeping Bag\",\r\n    \"description\": \"Premium 650-fill-power down sleeping bag designed for sub-zero alpine environments and winter camping.\",\r\n    \"brand\": \"Marmot\",\r\n    \"pricePerDay\": 12.00,\r\n    \"stock\": 8,\r\n    \"availableStock\": 8,\r\n    \"categoryId\": \"0e55a1f6-19c9-4a77-b2bc-42ba6269d996\"\r\n  }\r\n\r\n//   {\r\n//     \"title\": \"21-Speed Mountain Trail Bike\",\r\n//     \"description\": \"Hardtail mountain bike with front suspension, mechanical disc brakes, and durable all-terrain tires.\",\r\n//     \"brand\": \"Trek\",\r\n//     \"pricePerDay\": 25.00,\r\n//     \"stock\": 4,\r\n//     \"availableStock\": 4,\r\n//     \"categoryId\": \"25ab9058-6445-428f-933f-ed94b8a27eb6\"\r\n//   }\r\n\r\n//   {\r\n//     \"title\": \"Inflatable Stand-Up Paddleboard (SUP)\",\r\n//     \"description\": \"10-foot stable paddleboard kit. Includes dual-action pump, adjustable aluminum paddle, travel backpack, and safety leash.\",\r\n//     \"brand\": \"Aqua Marina\",\r\n//     \"pricePerDay\": 30.00,\r\n//     \"stock\": 6,\r\n//     \"availableStock\": 6,\r\n//     \"categoryId\": \"97d64634-7840-48b5-aa1f-1bac22258c2a\"\r\n//   }\r\n\r\n//   {\r\n//     \"title\": \"Premium English Willow Cricket Bat\",\r\n//     \"description\": \"Grade 1 English Willow professional cricket bat with a sweet spot optimized for heavy hitting.\",\r\n//     \"brand\": \"SS Cricket\",\r\n//     \"pricePerDay\": 10.00,\r\n//     \"stock\": 10,\r\n//     \"availableStock\": 10,\r\n//     \"categoryId\": \"16c2aa0f-6e84-4dbc-bc26-b51f0e71817a\"\r\n//   }\r\n\r\n//   {\r\n//     \"title\": \"Leather Match Football (Size 5)\",\r\n//     \"description\": \"FIFA-quality pro match football featuring thermo-bonded seamless surface for more predictable trajectory.\",\r\n//     \"brand\": \"Adidas\",\r\n//     \"pricePerDay\": 5.00,\r\n//     \"stock\": 15,\r\n//     \"availableStock\": 15,\r\n//     \"categoryId\": \"4a33c7dd-f55f-4cff-9f9c-062000b20cf3\"\r\n//   }\r\n\r\n//   {\r\n//     \"title\": \"Carbon Fiber Trekking Poles (Pair)\",\r\n//     \"description\": \"Adjustable quick-lock hiking sticks with anti-shock technology and sweat-wicking EVA foam grips.\",\r\n//     \"brand\": \"Black Diamond\",\r\n//     \"pricePerDay\": 7.50,\r\n//     \"stock\": 12,\r\n//     \"availableStock\": 12,\r\n//     \"categoryId\": \"31457275-ca63-4714-96bc-442d2a18aa8f\"\r\n//   }\r\n\r\n//   {\r\n//     \"title\": \"Professional Graphite Badminton Racket\",\r\n//     \"description\": \"High-modulus carbon graphite frame badminton racket offering ultra-fast swing speeds and crisp offensive power.\",\r\n//     \"brand\": \"Yonex\",\r\n//     \"pricePerDay\": 6.50,\r\n//     \"stock\": 8,\r\n//     \"availableStock\": 8,\r\n//     \"categoryId\": \"f551ee51-665b-4002-8b1d-c82958ec4d01\"\r\n//   }\r\n\r\n//   {\r\n//     \"title\": \"Adult Hybrid Life Jacket / PFD\",\r\n//     \"description\": \"High-visibility coast-guard approved life vest with adjustable straps and front zip utility pockets.\",\r\n//     \"brand\": \"O'Neill\",\r\n//     \"pricePerDay\": 6.00,\r\n//     \"stock\": 20,\r\n//     \"availableStock\": 20,\r\n//     \"categoryId\": \"97d64634-7840-48b5-aa1f-1bac22258c2a\"\r\n//   }\r\n\r\n//   {\r\n//     \"title\": \"Nylon Shuttles / Birdies (6-Pack)\",\r\n//     \"description\": \"Precision-manufactured nylon shuttlecocks engineered for stable trajectory and long-lasting durability.\",\r\n//     \"brand\": \"Yonex\",\r\n//     \"pricePerDay\": 2.00,\r\n//     \"stock\": 25,\r\n//     \"availableStock\": 25,\r\n//     \"categoryId\": \"f551ee51-665b-4002-8b1d-c82958ec4d01\"\r\n//   }\r\n"
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/api/admin/users",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "admin",
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "register",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "\r\n// {\r\n//     \"name\": \"Pranta Barua\", \r\n//     \"email\": \"pranta.admin@mail.com\", \r\n//     \"password\": \"1234\", \r\n//     \"role\": \"ADMIN\", \r\n//     \"profilePhoto\": \"www.testimage.com\", \r\n//     \"address\": \"Chittagong\", \r\n//     \"phone\": \"012564565\"\r\n// }\r\n\r\n\r\n// {   \r\n//     \"name\": \"Pranta2 Barua\", \r\n//     \"email\": \"pranta2.provider@mail.com\", \r\n//     \"password\": \"1234\", \r\n//     \"role\": \"PROVIDER\", \r\n//     \"profilePhoto\": \"www.testimage.com\", \r\n//     \"address\": \"Chittagong\", \r\n//     \"phone\": \"012564565\"\r\n// }\r\n\r\n\r\n// {   \r\n//     \"name\": \"Rakib\", \r\n//     \"email\": \"rakib.provider@mail.com\", \r\n//     \"password\": \"1234\", \r\n//     \"role\": \"PROVIDER\", \r\n//     \"profilePhoto\": \"www.testimage.com\", \r\n//     \"address\": \"Dhaka\", \r\n//     \"phone\": \"013423565\"\r\n// }\r\n\r\n\r\n// {\r\n//     \"name\": \"Prince Barua\", \r\n//     \"email\": \"prince@mail.com\", \r\n//     \"password\": \"1234\", \r\n//     // \"role\": \"PROVIDER\", \r\n//     \"profilePhoto\": \"www.testimage.com\", \r\n//     \"address\": \"Chittagong\", \r\n//     \"phone\": \"012564565\"\r\n// }\r\n\r\n\r\n{\r\n    \"name\": \"Mahabub Hassan\", \r\n    \"email\": \"mahabub@mail.com\", \r\n    \"password\": \"1234\", \r\n    // \"role\": \"CUSTOMER\", \r\n    \"profilePhoto\": \"www.testimage.com\", \r\n    \"address\": \"Barishal\", \r\n    \"phone\": \"665445\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/auth/register",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "// {\r\n//     \"email\": \"pranta.admin@mail.com\", \r\n//     \"password\": \"1234\"\r\n// }\r\n\r\n// {\r\n//     \"email\": \"pranta2.provider@mail.com\", \r\n//     \"password\": \"1234\"\r\n// }\r\n\r\n{\r\n    \"email\": \"rakib.provider@mail.com\", \r\n    \"password\": \"1234\"\r\n}\r\n\r\n\r\n// { // CUSTOMER ID\r\n//     \"email\": \"prince@mail.com\", \r\n//     \"password\": \"1234\"\r\n// }\r\n\r\n\r\n// { // CUSTOMER ID\r\n//     \"email\": \"mahabub@mail.com\", \r\n//     \"password\": \"1234\"\r\n// }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/auth/login",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "text"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/auth/logout",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "auth",
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "me",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5000/api/auth/me",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update user",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "\r\n{\r\n    \"name\": \"Pranta Barua\",\r\n    \"profilePhoto\": \"www.test.admin.image.com\", \r\n    \"address\": \"Chittagong\", \r\n    \"phone\": \"014345565\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/users/profile",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "users",
+                "profile"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "category",
+      "item": [
+        {
+          "name": "create category",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "[\r\n    { \"name\": \"Camping\" },\r\n    { \"name\": \"Cycling\" },\r\n    { \"name\": \"Water Sports\" },\r\n    { \"name\": \"Cricat Sports\" },\r\n    { \"name\": \"Football Sports\" },\r\n    { \"name\": \"Mountaineer\" },\r\n    { \"name\": \"Batminton Sports\" }\r\n]\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/admin/categories",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "admin",
+                "categories"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get categories",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "[\r\n    { \"name\": \"Camping\" },\r\n    { \"name\": \"Cycling\" },\r\n    { \"name\": \"Water Sports\" },\r\n    { \"name\": \"Cricat Sports\" },\r\n    { \"name\": \"Football Sports\" },\r\n    { \"name\": \"Mountaineer\" },\r\n    { \"name\": \"Batminton Sports\" }\r\n\r\n]\r\n"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/categories",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "categories"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get single category",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "[\r\n    { \"name\": \"Camping\" },\r\n    { \"name\": \"Cycling\" },\r\n    { \"name\": \"Water Sports\" },\r\n    { \"name\": \"Cricat Sports\" },\r\n    { \"name\": \"Football Sports\" },\r\n    { \"name\": \"Mountaineer\" },\r\n    { \"name\": \"Batminton Sports\" }\r\n\r\n]\r\n"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/categories",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "categories"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "category update",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "[\r\n    { \"name\": \"Camping\" },\r\n    { \"name\": \"Cycling\" },\r\n    { \"name\": \"Water Sports\" },\r\n    { \"name\": \"Cricat Sports\" },\r\n    { \"name\": \"Football Sports\" },\r\n    { \"name\": \"Mountaineer\" },\r\n    { \"name\": \"Batminton Sports\" }\r\n\r\n]\r\n"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/admin/categories/:id",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5000",
+              "path": [
+                "api",
+                "admin",
+                "categories",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "category delete",
+          "request": {
+            "method": "DELETE",
+            "header": []
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "gear items",
+      "item": [
+        {
+          "name": "provider",
+          "item": [
+            {
+              "name": "create gear item",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "\r\n//   {\r\n//     \"title\": \"Ultralight 2-Person Camping Tent\",\r\n//     \"description\": \"Waterproof, lightweight backpacking tent with aluminum poles and dual vestibules. Perfect for 3-season hiking.\",\r\n//     \"brand\": \"Deuter\",\r\n//     \"pricePerDay\": 15.50,\r\n//     \"stock\": 5,\r\n//     \"availableStock\": 5,\r\n//     \"categoryId\": \"0e55a1f6-19c9-4a77-b2bc-42ba6269d996\"\r\n//   }\r\n\r\n//   {\r\n//     \"title\": \"Marmot 0°F Down Sleeping Bag\",\r\n//     \"description\": \"Premium 650-fill-power down sleeping bag designed for sub-zero alpine environments and winter camping.\",\r\n//     \"brand\": \"Marmot\",\r\n//     \"pricePerDay\": 12.00,\r\n//     \"stock\": 8,\r\n//     \"availableStock\": 8,\r\n//     \"categoryId\": \"0e55a1f6-19c9-4a77-b2bc-42ba6269d996\"\r\n//   }\r\n\r\n  {\r\n    \"title\": \"21-Speed Mountain Trail Bike\",\r\n    \"description\": \"Hardtail mountain bike with front suspension, mechanical disc brakes, and durable all-terrain tires.\",\r\n    \"brand\": \"Trek\",\r\n    \"pricePerDay\": 25.00,\r\n    \"stock\": 4,\r\n    \"availableStock\": 4,\r\n    \"categoryId\": \"25ab9058-6445-428f-933f-ed94b8a27eb6\"\r\n  }\r\n\r\n//   {\r\n//     \"title\": \"Inflatable Stand-Up Paddleboard (SUP)\",\r\n//     \"description\": \"10-foot stable paddleboard kit. Includes dual-action pump, adjustable aluminum paddle, travel backpack, and safety leash.\",\r\n//     \"brand\": \"Aqua Marina\",\r\n//     \"pricePerDay\": 30.00,\r\n//     \"stock\": 6,\r\n//     \"availableStock\": 6,\r\n//     \"categoryId\": \"97d64634-7840-48b5-aa1f-1bac22258c2a\"\r\n//   }\r\n\r\n//   {\r\n//     \"title\": \"Premium English Willow Cricket Bat\",\r\n//     \"description\": \"Grade 1 English Willow professional cricket bat with a sweet spot optimized for heavy hitting.\",\r\n//     \"brand\": \"SS Cricket\",\r\n//     \"pricePerDay\": 10.00,\r\n//     \"stock\": 10,\r\n//     \"availableStock\": 10,\r\n//     \"categoryId\": \"16c2aa0f-6e84-4dbc-bc26-b51f0e71817a\"\r\n//   }\r\n\r\n//   {\r\n//     \"title\": \"Leather Match Football (Size 5)\",\r\n//     \"description\": \"FIFA-quality pro match football featuring thermo-bonded seamless surface for more predictable trajectory.\",\r\n//     \"brand\": \"Adidas\",\r\n//     \"pricePerDay\": 5.00,\r\n//     \"stock\": 15,\r\n//     \"availableStock\": 15,\r\n//     \"categoryId\": \"4a33c7dd-f55f-4cff-9f9c-062000b20cf3\"\r\n//   }\r\n\r\n//   {\r\n//     \"title\": \"Carbon Fiber Trekking Poles (Pair)\",\r\n//     \"description\": \"Adjustable quick-lock hiking sticks with anti-shock technology and sweat-wicking EVA foam grips.\",\r\n//     \"brand\": \"Black Diamond\",\r\n//     \"pricePerDay\": 7.50,\r\n//     \"stock\": 12,\r\n//     \"availableStock\": 12,\r\n//     \"categoryId\": \"31457275-ca63-4714-96bc-442d2a18aa8f\"\r\n//   }\r\n\r\n//   {\r\n//     \"title\": \"Professional Graphite Badminton Racket\",\r\n//     \"description\": \"High-modulus carbon graphite frame badminton racket offering ultra-fast swing speeds and crisp offensive power.\",\r\n//     \"brand\": \"Yonex\",\r\n//     \"pricePerDay\": 6.50,\r\n//     \"stock\": 8,\r\n//     \"availableStock\": 8,\r\n//     \"categoryId\": \"f551ee51-665b-4002-8b1d-c82958ec4d01\"\r\n//   }\r\n\r\n//   {\r\n//     \"title\": \"Adult Hybrid Life Jacket / PFD\",\r\n//     \"description\": \"High-visibility coast-guard approved life vest with adjustable straps and front zip utility pockets.\",\r\n//     \"brand\": \"O'Neill\",\r\n//     \"pricePerDay\": 6.00,\r\n//     \"stock\": 20,\r\n//     \"availableStock\": 20,\r\n//     \"categoryId\": \"97d64634-7840-48b5-aa1f-1bac22258c2a\"\r\n//   }\r\n\r\n//   {\r\n//     \"title\": \"Nylon Shuttles / Birdies (6-Pack)\",\r\n//     \"description\": \"Precision-manufactured nylon shuttlecocks engineered for stable trajectory and long-lasting durability.\",\r\n//     \"brand\": \"Yonex\",\r\n//     \"pricePerDay\": 2.00,\r\n//     \"stock\": 25,\r\n//     \"availableStock\": 25,\r\n//     \"categoryId\": \"f551ee51-665b-4002-8b1d-c82958ec4d01\"\r\n//   }\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/api/provider/gear",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "provider",
+                    "gear"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "update gear items",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "\r\n  {\r\n    \"title\": \"prince Ultralight 2-Person Camping Tent\",\r\n    \"description\": \"Waterproof, lightweight backpacking tent with aluminum poles and dual vestibules. Perfect for 3-season hiking.\",\r\n    \"brand\": \"Deuter\",\r\n    \"pricePerDay\": 15.50,\r\n    \"stock\": 5,\r\n    \"availableStock\": 5,\r\n    \"categoryId\": \"0e55a1f6-19c9-4a77-b2bc-42ba6269d996\"\r\n  }\r\n//   {\r\n//     \"title\": \"Marmot 0°F Down Sleeping Bag\",\r\n//     \"description\": \"Premium 650-fill-power down sleeping bag designed for sub-zero alpine environments and winter camping.\",\r\n//     \"brand\": \"Marmot\",\r\n//     \"pricePerDay\": 12.00,\r\n//     \"stock\": 8,\r\n//     \"availableStock\": 8,\r\n//     \"categoryId\": \"0e55a1f6-19c9-4a77-b2bc-42ba6269d996\"\r\n//   },\r\n//   {\r\n//     \"title\": \"21-Speed Mountain Trail Bike\",\r\n//     \"description\": \"Hardtail mountain bike with front suspension, mechanical disc brakes, and durable all-terrain tires.\",\r\n//     \"brand\": \"Trek\",\r\n//     \"pricePerDay\": 25.00,\r\n//     \"stock\": 4,\r\n//     \"availableStock\": 4,\r\n//     \"categoryId\": \"25ab9058-6445-428f-933f-ed94b8a27eb6\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Inflatable Stand-Up Paddleboard (SUP)\",\r\n//     \"description\": \"10-foot stable paddleboard kit. Includes dual-action pump, adjustable aluminum paddle, travel backpack, and safety leash.\",\r\n//     \"brand\": \"Aqua Marina\",\r\n//     \"pricePerDay\": 30.00,\r\n//     \"stock\": 6,\r\n//     \"availableStock\": 6,\r\n//     \"categoryId\": \"97d64634-7840-48b5-aa1f-1bac22258c2a\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Premium English Willow Cricket Bat\",\r\n//     \"description\": \"Grade 1 English Willow professional cricket bat with a sweet spot optimized for heavy hitting.\",\r\n//     \"brand\": \"SS Cricket\",\r\n//     \"pricePerDay\": 10.00,\r\n//     \"stock\": 10,\r\n//     \"availableStock\": 10,\r\n//     \"categoryId\": \"16c2aa0f-6e84-4dbc-bc26-b51f0e71817a\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Leather Match Football (Size 5)\",\r\n//     \"description\": \"FIFA-quality pro match football featuring thermo-bonded seamless surface for more predictable trajectory.\",\r\n//     \"brand\": \"Adidas\",\r\n//     \"pricePerDay\": 5.00,\r\n//     \"stock\": 15,\r\n//     \"availableStock\": 15,\r\n//     \"categoryId\": \"4a33c7dd-f55f-4cff-9f9c-062000b20cf3\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Carbon Fiber Trekking Poles (Pair)\",\r\n//     \"description\": \"Adjustable quick-lock hiking sticks with anti-shock technology and sweat-wicking EVA foam grips.\",\r\n//     \"brand\": \"Black Diamond\",\r\n//     \"pricePerDay\": 7.50,\r\n//     \"stock\": 12,\r\n//     \"availableStock\": 12,\r\n//     \"categoryId\": \"31457275-ca63-4714-96bc-442d2a18aa8f\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Professional Graphite Badminton Racket\",\r\n//     \"description\": \"High-modulus carbon graphite frame badminton racket offering ultra-fast swing speeds and crisp offensive power.\",\r\n//     \"brand\": \"Yonex\",\r\n//     \"pricePerDay\": 6.50,\r\n//     \"stock\": 8,\r\n//     \"availableStock\": 8,\r\n//     \"categoryId\": \"f551ee51-665b-4002-8b1d-c82958ec4d01\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Adult Hybrid Life Jacket / PFD\",\r\n//     \"description\": \"High-visibility coast-guard approved life vest with adjustable straps and front zip utility pockets.\",\r\n//     \"brand\": \"O'Neill\",\r\n//     \"pricePerDay\": 6.00,\r\n//     \"stock\": 20,\r\n//     \"availableStock\": 20,\r\n//     \"categoryId\": \"97d64634-7840-48b5-aa1f-1bac22258c2a\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Nylon Shuttles / Birdies (6-Pack)\",\r\n//     \"description\": \"Precision-manufactured nylon shuttlecocks engineered for stable trajectory and long-lasting durability.\",\r\n//     \"brand\": \"Yonex\",\r\n//     \"pricePerDay\": 2.00,\r\n//     \"stock\": 25,\r\n//     \"availableStock\": 25,\r\n//     \"categoryId\": \"f551ee51-665b-4002-8b1d-c82958ec4d01\"\r\n//   }\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:5000/api/provider/gear/96ccbacb-0937-4a7d-902d-6b9ebdbd4628",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5000",
+                  "path": [
+                    "api",
+                    "provider",
+                    "gear",
+                    "96ccbacb-0937-4a7d-902d-6b9ebdbd4628"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "get own provider gear items",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5000/api/provider/gear",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5000",
+                  "path": [
+                    "api",
+                    "provider",
+                    "gear"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "get single gear item Copy",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5000/api/provider/gear/:id",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5000",
+                  "path": [
+                    "api",
+                    "provider",
+                    "gear",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "96ccbacb-0937-4a7d-902d-6b9ebdbd4628"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "delete own gear",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "\r\n  {\r\n    \"title\": \"Ultralight 2-Person Camping Tent\",\r\n    \"description\": \"Waterproof, lightweight backpacking tent with aluminum poles and dual vestibules. Perfect for 3-season hiking.\",\r\n    \"brand\": \"Deuter\",\r\n    \"pricePerDay\": 15.50,\r\n    \"stock\": 5,\r\n    \"availableStock\": 5,\r\n    \"categoryId\": \"0e55a1f6-19c9-4a77-b2bc-42ba6269d996\"\r\n  }\r\n//   {\r\n//     \"title\": \"Marmot 0°F Down Sleeping Bag\",\r\n//     \"description\": \"Premium 650-fill-power down sleeping bag designed for sub-zero alpine environments and winter camping.\",\r\n//     \"brand\": \"Marmot\",\r\n//     \"pricePerDay\": 12.00,\r\n//     \"stock\": 8,\r\n//     \"availableStock\": 8,\r\n//     \"categoryId\": \"0e55a1f6-19c9-4a77-b2bc-42ba6269d996\"\r\n//   },\r\n//   {\r\n//     \"title\": \"21-Speed Mountain Trail Bike\",\r\n//     \"description\": \"Hardtail mountain bike with front suspension, mechanical disc brakes, and durable all-terrain tires.\",\r\n//     \"brand\": \"Trek\",\r\n//     \"pricePerDay\": 25.00,\r\n//     \"stock\": 4,\r\n//     \"availableStock\": 4,\r\n//     \"categoryId\": \"25ab9058-6445-428f-933f-ed94b8a27eb6\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Inflatable Stand-Up Paddleboard (SUP)\",\r\n//     \"description\": \"10-foot stable paddleboard kit. Includes dual-action pump, adjustable aluminum paddle, travel backpack, and safety leash.\",\r\n//     \"brand\": \"Aqua Marina\",\r\n//     \"pricePerDay\": 30.00,\r\n//     \"stock\": 6,\r\n//     \"availableStock\": 6,\r\n//     \"categoryId\": \"97d64634-7840-48b5-aa1f-1bac22258c2a\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Premium English Willow Cricket Bat\",\r\n//     \"description\": \"Grade 1 English Willow professional cricket bat with a sweet spot optimized for heavy hitting.\",\r\n//     \"brand\": \"SS Cricket\",\r\n//     \"pricePerDay\": 10.00,\r\n//     \"stock\": 10,\r\n//     \"availableStock\": 10,\r\n//     \"categoryId\": \"16c2aa0f-6e84-4dbc-bc26-b51f0e71817a\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Leather Match Football (Size 5)\",\r\n//     \"description\": \"FIFA-quality pro match football featuring thermo-bonded seamless surface for more predictable trajectory.\",\r\n//     \"brand\": \"Adidas\",\r\n//     \"pricePerDay\": 5.00,\r\n//     \"stock\": 15,\r\n//     \"availableStock\": 15,\r\n//     \"categoryId\": \"4a33c7dd-f55f-4cff-9f9c-062000b20cf3\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Carbon Fiber Trekking Poles (Pair)\",\r\n//     \"description\": \"Adjustable quick-lock hiking sticks with anti-shock technology and sweat-wicking EVA foam grips.\",\r\n//     \"brand\": \"Black Diamond\",\r\n//     \"pricePerDay\": 7.50,\r\n//     \"stock\": 12,\r\n//     \"availableStock\": 12,\r\n//     \"categoryId\": \"31457275-ca63-4714-96bc-442d2a18aa8f\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Professional Graphite Badminton Racket\",\r\n//     \"description\": \"High-modulus carbon graphite frame badminton racket offering ultra-fast swing speeds and crisp offensive power.\",\r\n//     \"brand\": \"Yonex\",\r\n//     \"pricePerDay\": 6.50,\r\n//     \"stock\": 8,\r\n//     \"availableStock\": 8,\r\n//     \"categoryId\": \"f551ee51-665b-4002-8b1d-c82958ec4d01\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Adult Hybrid Life Jacket / PFD\",\r\n//     \"description\": \"High-visibility coast-guard approved life vest with adjustable straps and front zip utility pockets.\",\r\n//     \"brand\": \"O'Neill\",\r\n//     \"pricePerDay\": 6.00,\r\n//     \"stock\": 20,\r\n//     \"availableStock\": 20,\r\n//     \"categoryId\": \"97d64634-7840-48b5-aa1f-1bac22258c2a\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Nylon Shuttles / Birdies (6-Pack)\",\r\n//     \"description\": \"Precision-manufactured nylon shuttlecocks engineered for stable trajectory and long-lasting durability.\",\r\n//     \"brand\": \"Yonex\",\r\n//     \"pricePerDay\": 2.00,\r\n//     \"stock\": 25,\r\n//     \"availableStock\": 25,\r\n//     \"categoryId\": \"f551ee51-665b-4002-8b1d-c82958ec4d01\"\r\n//   }\r\n"
+                },
+                "url": {
+                  "raw": "http://localhost:5000/api/provider/gear/46e3c823-a6ba-456c-aa38-90784a548ffc",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5000",
+                  "path": [
+                    "api",
+                    "provider",
+                    "gear",
+                    "46e3c823-a6ba-456c-aa38-90784a548ffc"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "admin",
+          "item": [
+            {
+              "name": "create gear item",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "\r\n//   {\r\n//     \"title\": \"Ultralight 2-Person Camping Tent\",\r\n//     \"description\": \"Waterproof, lightweight backpacking tent with aluminum poles and dual vestibules. Perfect for 3-season hiking.\",\r\n//     \"brand\": \"Deuter\",\r\n//     \"pricePerDay\": 15.50,\r\n//     \"stock\": 5,\r\n//     \"availableStock\": 5,\r\n//     \"categoryId\": \"0e55a1f6-19c9-4a77-b2bc-42ba6269d996\"\r\n//   }\r\n\r\n  {\r\n    \"title\": \"Marmot 0°F Down Sleeping Bag\",\r\n    \"description\": \"Premium 650-fill-power down sleeping bag designed for sub-zero alpine environments and winter camping.\",\r\n    \"brand\": \"Marmot\",\r\n    \"pricePerDay\": 12.00,\r\n    \"stock\": 8,\r\n    \"availableStock\": 8,\r\n    \"categoryId\": \"0e55a1f6-19c9-4a77-b2bc-42ba6269d996\"\r\n  }\r\n\r\n//   {\r\n//     \"title\": \"21-Speed Mountain Trail Bike\",\r\n//     \"description\": \"Hardtail mountain bike with front suspension, mechanical disc brakes, and durable all-terrain tires.\",\r\n//     \"brand\": \"Trek\",\r\n//     \"pricePerDay\": 25.00,\r\n//     \"stock\": 4,\r\n//     \"availableStock\": 4,\r\n//     \"categoryId\": \"25ab9058-6445-428f-933f-ed94b8a27eb6\"\r\n//   }\r\n\r\n//   {\r\n//     \"title\": \"Inflatable Stand-Up Paddleboard (SUP)\",\r\n//     \"description\": \"10-foot stable paddleboard kit. Includes dual-action pump, adjustable aluminum paddle, travel backpack, and safety leash.\",\r\n//     \"brand\": \"Aqua Marina\",\r\n//     \"pricePerDay\": 30.00,\r\n//     \"stock\": 6,\r\n//     \"availableStock\": 6,\r\n//     \"categoryId\": \"97d64634-7840-48b5-aa1f-1bac22258c2a\"\r\n//   }\r\n\r\n//   {\r\n//     \"title\": \"Premium English Willow Cricket Bat\",\r\n//     \"description\": \"Grade 1 English Willow professional cricket bat with a sweet spot optimized for heavy hitting.\",\r\n//     \"brand\": \"SS Cricket\",\r\n//     \"pricePerDay\": 10.00,\r\n//     \"stock\": 10,\r\n//     \"availableStock\": 10,\r\n//     \"categoryId\": \"16c2aa0f-6e84-4dbc-bc26-b51f0e71817a\"\r\n//   }\r\n\r\n//   {\r\n//     \"title\": \"Leather Match Football (Size 5)\",\r\n//     \"description\": \"FIFA-quality pro match football featuring thermo-bonded seamless surface for more predictable trajectory.\",\r\n//     \"brand\": \"Adidas\",\r\n//     \"pricePerDay\": 5.00,\r\n//     \"stock\": 15,\r\n//     \"availableStock\": 15,\r\n//     \"categoryId\": \"4a33c7dd-f55f-4cff-9f9c-062000b20cf3\"\r\n//   }\r\n\r\n//   {\r\n//     \"title\": \"Carbon Fiber Trekking Poles (Pair)\",\r\n//     \"description\": \"Adjustable quick-lock hiking sticks with anti-shock technology and sweat-wicking EVA foam grips.\",\r\n//     \"brand\": \"Black Diamond\",\r\n//     \"pricePerDay\": 7.50,\r\n//     \"stock\": 12,\r\n//     \"availableStock\": 12,\r\n//     \"categoryId\": \"31457275-ca63-4714-96bc-442d2a18aa8f\"\r\n//   }\r\n\r\n//   {\r\n//     \"title\": \"Professional Graphite Badminton Racket\",\r\n//     \"description\": \"High-modulus carbon graphite frame badminton racket offering ultra-fast swing speeds and crisp offensive power.\",\r\n//     \"brand\": \"Yonex\",\r\n//     \"pricePerDay\": 6.50,\r\n//     \"stock\": 8,\r\n//     \"availableStock\": 8,\r\n//     \"categoryId\": \"f551ee51-665b-4002-8b1d-c82958ec4d01\"\r\n//   }\r\n\r\n//   {\r\n//     \"title\": \"Adult Hybrid Life Jacket / PFD\",\r\n//     \"description\": \"High-visibility coast-guard approved life vest with adjustable straps and front zip utility pockets.\",\r\n//     \"brand\": \"O'Neill\",\r\n//     \"pricePerDay\": 6.00,\r\n//     \"stock\": 20,\r\n//     \"availableStock\": 20,\r\n//     \"categoryId\": \"97d64634-7840-48b5-aa1f-1bac22258c2a\"\r\n//   }\r\n\r\n//   {\r\n//     \"title\": \"Nylon Shuttles / Birdies (6-Pack)\",\r\n//     \"description\": \"Precision-manufactured nylon shuttlecocks engineered for stable trajectory and long-lasting durability.\",\r\n//     \"brand\": \"Yonex\",\r\n//     \"pricePerDay\": 2.00,\r\n//     \"stock\": 25,\r\n//     \"availableStock\": 25,\r\n//     \"categoryId\": \"f551ee51-665b-4002-8b1d-c82958ec4d01\"\r\n//   }\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/api/admin/gear",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "admin",
+                    "gear"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "update gear items",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "\r\n  {\r\n    // \"title\": \"Ultralight 2-Person Camping Tent\",\r\n    // \"description\": \"Waterproof, lightweight backpacking tent with aluminum poles and dual vestibules. Perfect for 3-season hiking.\",\r\n    // \"brand\": \"Deuter\",\r\n    // \"pricePerDay\": 15.50,\r\n    // \"stock\": 5,\r\n    \"availableStock\": 0\r\n    // \"categoryId\": \"0e55a1f6-19c9-4a77-b2bc-42ba6269d996\"\r\n  }\r\n//   {\r\n//     \"title\": \"Marmot 0°F Down Sleeping Bag\",\r\n//     \"description\": \"Premium 650-fill-power down sleeping bag designed for sub-zero alpine environments and winter camping.\",\r\n//     \"brand\": \"Marmot\",\r\n//     \"pricePerDay\": 12.00,\r\n//     \"stock\": 8,\r\n//     \"availableStock\": 8,\r\n//     \"categoryId\": \"0e55a1f6-19c9-4a77-b2bc-42ba6269d996\"\r\n//   },\r\n//   {\r\n//     \"title\": \"21-Speed Mountain Trail Bike\",\r\n//     \"description\": \"Hardtail mountain bike with front suspension, mechanical disc brakes, and durable all-terrain tires.\",\r\n//     \"brand\": \"Trek\",\r\n//     \"pricePerDay\": 25.00,\r\n//     \"stock\": 4,\r\n//     \"availableStock\": 4,\r\n//     \"categoryId\": \"25ab9058-6445-428f-933f-ed94b8a27eb6\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Inflatable Stand-Up Paddleboard (SUP)\",\r\n//     \"description\": \"10-foot stable paddleboard kit. Includes dual-action pump, adjustable aluminum paddle, travel backpack, and safety leash.\",\r\n//     \"brand\": \"Aqua Marina\",\r\n//     \"pricePerDay\": 30.00,\r\n//     \"stock\": 6,\r\n//     \"availableStock\": 6,\r\n//     \"categoryId\": \"97d64634-7840-48b5-aa1f-1bac22258c2a\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Premium English Willow Cricket Bat\",\r\n//     \"description\": \"Grade 1 English Willow professional cricket bat with a sweet spot optimized for heavy hitting.\",\r\n//     \"brand\": \"SS Cricket\",\r\n//     \"pricePerDay\": 10.00,\r\n//     \"stock\": 10,\r\n//     \"availableStock\": 10,\r\n//     \"categoryId\": \"16c2aa0f-6e84-4dbc-bc26-b51f0e71817a\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Leather Match Football (Size 5)\",\r\n//     \"description\": \"FIFA-quality pro match football featuring thermo-bonded seamless surface for more predictable trajectory.\",\r\n//     \"brand\": \"Adidas\",\r\n//     \"pricePerDay\": 5.00,\r\n//     \"stock\": 15,\r\n//     \"availableStock\": 15,\r\n//     \"categoryId\": \"4a33c7dd-f55f-4cff-9f9c-062000b20cf3\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Carbon Fiber Trekking Poles (Pair)\",\r\n//     \"description\": \"Adjustable quick-lock hiking sticks with anti-shock technology and sweat-wicking EVA foam grips.\",\r\n//     \"brand\": \"Black Diamond\",\r\n//     \"pricePerDay\": 7.50,\r\n//     \"stock\": 12,\r\n//     \"availableStock\": 12,\r\n//     \"categoryId\": \"31457275-ca63-4714-96bc-442d2a18aa8f\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Professional Graphite Badminton Racket\",\r\n//     \"description\": \"High-modulus carbon graphite frame badminton racket offering ultra-fast swing speeds and crisp offensive power.\",\r\n//     \"brand\": \"Yonex\",\r\n//     \"pricePerDay\": 6.50,\r\n//     \"stock\": 8,\r\n//     \"availableStock\": 8,\r\n//     \"categoryId\": \"f551ee51-665b-4002-8b1d-c82958ec4d01\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Adult Hybrid Life Jacket / PFD\",\r\n//     \"description\": \"High-visibility coast-guard approved life vest with adjustable straps and front zip utility pockets.\",\r\n//     \"brand\": \"O'Neill\",\r\n//     \"pricePerDay\": 6.00,\r\n//     \"stock\": 20,\r\n//     \"availableStock\": 20,\r\n//     \"categoryId\": \"97d64634-7840-48b5-aa1f-1bac22258c2a\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Nylon Shuttles / Birdies (6-Pack)\",\r\n//     \"description\": \"Precision-manufactured nylon shuttlecocks engineered for stable trajectory and long-lasting durability.\",\r\n//     \"brand\": \"Yonex\",\r\n//     \"pricePerDay\": 2.00,\r\n//     \"stock\": 25,\r\n//     \"availableStock\": 25,\r\n//     \"categoryId\": \"f551ee51-665b-4002-8b1d-c82958ec4d01\"\r\n//   }\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:5000/api/admin/gear/96ccbacb-0937-4a7d-902d-6b9ebdbd4628",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5000",
+                  "path": [
+                    "api",
+                    "admin",
+                    "gear",
+                    "96ccbacb-0937-4a7d-902d-6b9ebdbd4628"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "get single gear item",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5000/api/admin/gear",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5000",
+                  "path": [
+                    "api",
+                    "admin",
+                    "gear"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "get gear item",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:5000/api/admin/gear",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5000",
+                  "path": [
+                    "api",
+                    "admin",
+                    "gear"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "delete gear",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "\r\n  {\r\n    \"title\": \"Ultralight 2-Person Camping Tent\",\r\n    \"description\": \"Waterproof, lightweight backpacking tent with aluminum poles and dual vestibules. Perfect for 3-season hiking.\",\r\n    \"brand\": \"Deuter\",\r\n    \"pricePerDay\": 15.50,\r\n    \"stock\": 5,\r\n    \"availableStock\": 5,\r\n    \"categoryId\": \"0e55a1f6-19c9-4a77-b2bc-42ba6269d996\"\r\n  }\r\n//   {\r\n//     \"title\": \"Marmot 0°F Down Sleeping Bag\",\r\n//     \"description\": \"Premium 650-fill-power down sleeping bag designed for sub-zero alpine environments and winter camping.\",\r\n//     \"brand\": \"Marmot\",\r\n//     \"pricePerDay\": 12.00,\r\n//     \"stock\": 8,\r\n//     \"availableStock\": 8,\r\n//     \"categoryId\": \"0e55a1f6-19c9-4a77-b2bc-42ba6269d996\"\r\n//   },\r\n//   {\r\n//     \"title\": \"21-Speed Mountain Trail Bike\",\r\n//     \"description\": \"Hardtail mountain bike with front suspension, mechanical disc brakes, and durable all-terrain tires.\",\r\n//     \"brand\": \"Trek\",\r\n//     \"pricePerDay\": 25.00,\r\n//     \"stock\": 4,\r\n//     \"availableStock\": 4,\r\n//     \"categoryId\": \"25ab9058-6445-428f-933f-ed94b8a27eb6\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Inflatable Stand-Up Paddleboard (SUP)\",\r\n//     \"description\": \"10-foot stable paddleboard kit. Includes dual-action pump, adjustable aluminum paddle, travel backpack, and safety leash.\",\r\n//     \"brand\": \"Aqua Marina\",\r\n//     \"pricePerDay\": 30.00,\r\n//     \"stock\": 6,\r\n//     \"availableStock\": 6,\r\n//     \"categoryId\": \"97d64634-7840-48b5-aa1f-1bac22258c2a\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Premium English Willow Cricket Bat\",\r\n//     \"description\": \"Grade 1 English Willow professional cricket bat with a sweet spot optimized for heavy hitting.\",\r\n//     \"brand\": \"SS Cricket\",\r\n//     \"pricePerDay\": 10.00,\r\n//     \"stock\": 10,\r\n//     \"availableStock\": 10,\r\n//     \"categoryId\": \"16c2aa0f-6e84-4dbc-bc26-b51f0e71817a\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Leather Match Football (Size 5)\",\r\n//     \"description\": \"FIFA-quality pro match football featuring thermo-bonded seamless surface for more predictable trajectory.\",\r\n//     \"brand\": \"Adidas\",\r\n//     \"pricePerDay\": 5.00,\r\n//     \"stock\": 15,\r\n//     \"availableStock\": 15,\r\n//     \"categoryId\": \"4a33c7dd-f55f-4cff-9f9c-062000b20cf3\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Carbon Fiber Trekking Poles (Pair)\",\r\n//     \"description\": \"Adjustable quick-lock hiking sticks with anti-shock technology and sweat-wicking EVA foam grips.\",\r\n//     \"brand\": \"Black Diamond\",\r\n//     \"pricePerDay\": 7.50,\r\n//     \"stock\": 12,\r\n//     \"availableStock\": 12,\r\n//     \"categoryId\": \"31457275-ca63-4714-96bc-442d2a18aa8f\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Professional Graphite Badminton Racket\",\r\n//     \"description\": \"High-modulus carbon graphite frame badminton racket offering ultra-fast swing speeds and crisp offensive power.\",\r\n//     \"brand\": \"Yonex\",\r\n//     \"pricePerDay\": 6.50,\r\n//     \"stock\": 8,\r\n//     \"availableStock\": 8,\r\n//     \"categoryId\": \"f551ee51-665b-4002-8b1d-c82958ec4d01\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Adult Hybrid Life Jacket / PFD\",\r\n//     \"description\": \"High-visibility coast-guard approved life vest with adjustable straps and front zip utility pockets.\",\r\n//     \"brand\": \"O'Neill\",\r\n//     \"pricePerDay\": 6.00,\r\n//     \"stock\": 20,\r\n//     \"availableStock\": 20,\r\n//     \"categoryId\": \"97d64634-7840-48b5-aa1f-1bac22258c2a\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Nylon Shuttles / Birdies (6-Pack)\",\r\n//     \"description\": \"Precision-manufactured nylon shuttlecocks engineered for stable trajectory and long-lasting durability.\",\r\n//     \"brand\": \"Yonex\",\r\n//     \"pricePerDay\": 2.00,\r\n//     \"stock\": 25,\r\n//     \"availableStock\": 25,\r\n//     \"categoryId\": \"f551ee51-665b-4002-8b1d-c82958ec4d01\"\r\n//   }\r\n"
+                },
+                "url": {
+                  "raw": "http://localhost:5000/api/admin/gear/:id",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "5000",
+                  "path": [
+                    "api",
+                    "admin",
+                    "gear",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "96ccbacb-0937-4a7d-902d-6b9ebdbd4628"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "get gear items",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/gear?availableOnly=true&category=Camping&brand=Marmot&minPrice=10&maxPrice=20",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "gear"
+              ],
+              "query": [
+                {
+                  "key": "availableOnly",
+                  "value": "true"
+                },
+                {
+                  "key": "category",
+                  "value": "Camping"
+                },
+                {
+                  "key": "brand",
+                  "value": "Marmot"
+                },
+                {
+                  "key": "minPrice",
+                  "value": "10"
+                },
+                {
+                  "key": "maxPrice",
+                  "value": "20"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Rental Item",
+      "item": [
+        {
+          "name": "admin",
+          "item": [
+            {
+              "name": "get rental list",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"rating\": 5,\r\n    \"comment\": \"greate gear i love it\",\r\n    \"gearItemId\": \"1ec15160-43e5-42a4-9e6e-53d125b82b9f\"\r\n}"
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/api/admin/rentals/items",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "admin",
+                    "rentals",
+                    "items"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "get rental item",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "// [\r\n  {\r\n    \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n    \"startDate\": \"2026-07-10T00:00:00.000Z\",\r\n    \"endDate\": \"2026-07-15T00:00:00.000Z\",\r\n    \"rentalItems\": [\r\n        { \r\n            \"gearItemId\": \"c48b5226-af9f-46d8-a2d4-021b88dfe96d\", \r\n            \"quantity\": 1 \r\n        },\r\n        {  \r\n            \"gearItemId\": \"1adfe808-73e5-4e3f-9be6-ba638021fe45\", \r\n            \"quantity\": 2 \r\n        }\r\n    ],\r\n    \"status\": \"PENDING\"\r\n  }\r\n//   {\r\n//     \"id\": \"ord-00000002-8c8d-4ba6-86f1-a1e43e2bc89a\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-12T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-14T00:00:00.000Z\",\r\n//     \"totalPrice\": 31.00,\r\n//     \"status\": \"PENDING\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000003-ef72-4d30-b3ab-ee2a3b019df4\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-15T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-22T00:00:00.000Z\",\r\n//     \"totalPrice\": 184.50,\r\n//     \"status\": \"APPROVED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000004-921d-40aa-b1b2-1bc32ade45e0\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-18T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-20T00:00:00.000Z\",\r\n//     \"totalPrice\": 45.00,\r\n//     \"status\": \"COMPLETED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000005-cb21-4112-be22-df3ba129bc34\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-20T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-25T00:00:00.000Z\",\r\n//     \"totalPrice\": 220.00,\r\n//     \"status\": \"CANCELLED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000006-031a-429b-bc9d-fe4a39b2cd81\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-22T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-23T00:00:00.000Z\",\r\n//     \"totalPrice\": 12.00,\r\n//     \"status\": \"PENDING\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000007-449e-4fa2-bc40-221de4089aef\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-25T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-28T00:00:00.000Z\",\r\n//     \"totalPrice\": 135.00,\r\n//     \"status\": \"APPROVED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000008-bc4a-4e11-9a1d-d4fa231bcde4\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-27T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-30T00:00:00.000Z\",\r\n//     \"totalPrice\": 90.50,\r\n//     \"status\": \"COMPLETED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000009-efb1-4cd2-a72d-8bc43a129ebd\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-08-01T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-08-05T00:00:00.000Z\",\r\n//     \"totalPrice\": 160.00,\r\n//     \"status\": \"PENDING\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000010-33af-4921-bc7d-ea41b29cefab\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-08-03T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-08-04T00:00:00.000Z\",\r\n//     \"totalPrice\": 48.00,\r\n//     \"status\": \"APPROVED\"\r\n//   }\r\n// ]"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/rental/items",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "rental",
+                "items"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Rental order",
+      "item": [
+        {
+          "name": "providers order",
+          "item": [
+            {
+              "name": "orders list",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "// [\r\n  {\r\n    \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n    \"startDate\": \"2026-07-10T00:00:00.000Z\",\r\n    \"endDate\": \"2026-07-15T00:00:00.000Z\",\r\n    \"rentalItems\": [\r\n        { \r\n            \"gearItemId\": \"c48b5226-af9f-46d8-a2d4-021b88dfe96d\", \r\n            \"quantity\": 1 \r\n        },\r\n        {  \r\n            \"gearItemId\": \"1adfe808-73e5-4e3f-9be6-ba638021fe45\", \r\n            \"quantity\": 2 \r\n        }\r\n    ],\r\n    \"status\": \"PENDING\"\r\n  }\r\n//   {\r\n//     \"id\": \"ord-00000002-8c8d-4ba6-86f1-a1e43e2bc89a\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-12T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-14T00:00:00.000Z\",\r\n//     \"totalPrice\": 31.00,\r\n//     \"status\": \"PENDING\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000003-ef72-4d30-b3ab-ee2a3b019df4\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-15T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-22T00:00:00.000Z\",\r\n//     \"totalPrice\": 184.50,\r\n//     \"status\": \"APPROVED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000004-921d-40aa-b1b2-1bc32ade45e0\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-18T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-20T00:00:00.000Z\",\r\n//     \"totalPrice\": 45.00,\r\n//     \"status\": \"COMPLETED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000005-cb21-4112-be22-df3ba129bc34\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-20T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-25T00:00:00.000Z\",\r\n//     \"totalPrice\": 220.00,\r\n//     \"status\": \"CANCELLED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000006-031a-429b-bc9d-fe4a39b2cd81\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-22T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-23T00:00:00.000Z\",\r\n//     \"totalPrice\": 12.00,\r\n//     \"status\": \"PENDING\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000007-449e-4fa2-bc40-221de4089aef\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-25T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-28T00:00:00.000Z\",\r\n//     \"totalPrice\": 135.00,\r\n//     \"status\": \"APPROVED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000008-bc4a-4e11-9a1d-d4fa231bcde4\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-27T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-30T00:00:00.000Z\",\r\n//     \"totalPrice\": 90.50,\r\n//     \"status\": \"COMPLETED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000009-efb1-4cd2-a72d-8bc43a129ebd\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-08-01T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-08-05T00:00:00.000Z\",\r\n//     \"totalPrice\": 160.00,\r\n//     \"status\": \"PENDING\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000010-33af-4921-bc7d-ea41b29cefab\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-08-03T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-08-04T00:00:00.000Z\",\r\n//     \"totalPrice\": 48.00,\r\n//     \"status\": \"APPROVED\"\r\n//   }\r\n// ]"
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/api/provider/orders/:id",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "provider",
+                    "orders",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "b55b903b-ce2a-485c-a773-070009e16b76"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "update status",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"status\": \"CONFIRMED\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/api/provider/orders/:id",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "provider",
+                    "orders",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "b55b903b-ce2a-485c-a773-070009e16b76"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "admin",
+          "item": [
+            {
+              "name": "get all rental order",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/api/admin/rentals",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "admin",
+                    "rentals"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "delete rental order",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{BASE_URL}}/api/admin/rentals/:id",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "admin",
+                    "rentals",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "3c5bb130-540d-406c-9f05-772c6d5d21e5"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "create order",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "// [\r\n//   {\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-10T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-15T00:00:00.000Z\",\r\n//     \"rentalItems\": [\r\n//         { \r\n//             \"gearItemId\": \"c48b5226-af9f-46d8-a2d4-021b88dfe96d\", \r\n//             \"quantity\": 1 \r\n//         },\r\n//         {  \r\n//             \"gearItemId\": \"1adfe808-73e5-4e3f-9be6-ba638021fe45\", \r\n//             \"quantity\": 2 \r\n//         }\r\n//     ],\r\n//     \"status\": \"PENDING\"\r\n//   }\r\n\r\n\r\n  {\r\n    \"startDate\": \"2026-07-10T00:00:00.000Z\",\r\n    \"endDate\": \"2026-07-15T00:00:00.000Z\",\r\n    \r\n            \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n    \"rentalItems\": [\r\n        { \r\n            \"gearItemId\": \"c48b5226-af9f-46d8-a2d4-021b88dfe96d\", \r\n            \"quantity\": 1 \r\n        }\r\n    ]\r\n  }\r\n\r\n//   {\r\n//     \"id\": \"ord-00000002-8c8d-4ba6-86f1-a1e43e2bc89a\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-12T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-14T00:00:00.000Z\",\r\n//     \"totalPrice\": 31.00,\r\n//     \"status\": \"PENDING\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000003-ef72-4d30-b3ab-ee2a3b019df4\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-15T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-22T00:00:00.000Z\",\r\n//     \"totalPrice\": 184.50,\r\n//     \"status\": \"APPROVED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000004-921d-40aa-b1b2-1bc32ade45e0\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-18T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-20T00:00:00.000Z\",\r\n//     \"totalPrice\": 45.00,\r\n//     \"status\": \"COMPLETED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000005-cb21-4112-be22-df3ba129bc34\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-20T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-25T00:00:00.000Z\",\r\n//     \"totalPrice\": 220.00,\r\n//     \"status\": \"CANCELLED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000006-031a-429b-bc9d-fe4a39b2cd81\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-22T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-23T00:00:00.000Z\",\r\n//     \"totalPrice\": 12.00,\r\n//     \"status\": \"PENDING\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000007-449e-4fa2-bc40-221de4089aef\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-25T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-28T00:00:00.000Z\",\r\n//     \"totalPrice\": 135.00,\r\n//     \"status\": \"APPROVED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000008-bc4a-4e11-9a1d-d4fa231bcde4\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-27T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-30T00:00:00.000Z\",\r\n//     \"totalPrice\": 90.50,\r\n//     \"status\": \"COMPLETED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000009-efb1-4cd2-a72d-8bc43a129ebd\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-08-01T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-08-05T00:00:00.000Z\",\r\n//     \"totalPrice\": 160.00,\r\n//     \"status\": \"PENDING\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000010-33af-4921-bc7d-ea41b29cefab\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-08-03T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-08-04T00:00:00.000Z\",\r\n//     \"totalPrice\": 48.00,\r\n//     \"status\": \"APPROVED\"\r\n//   }\r\n// ]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/rentals",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "rentals"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get order",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "// [\r\n  {\r\n    \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n    \"startDate\": \"2026-07-10T00:00:00.000Z\",\r\n    \"endDate\": \"2026-07-15T00:00:00.000Z\",\r\n    \"rentalItems\": [\r\n        { \r\n            \"gearItemId\": \"c48b5226-af9f-46d8-a2d4-021b88dfe96d\", \r\n            \"quantity\": 1 \r\n        },\r\n        {  \r\n            \"gearItemId\": \"1adfe808-73e5-4e3f-9be6-ba638021fe45\", \r\n            \"quantity\": 2 \r\n        }\r\n    ],\r\n    \"status\": \"PENDING\"\r\n  }\r\n//   {\r\n//     \"id\": \"ord-00000002-8c8d-4ba6-86f1-a1e43e2bc89a\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-12T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-14T00:00:00.000Z\",\r\n//     \"totalPrice\": 31.00,\r\n//     \"status\": \"PENDING\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000003-ef72-4d30-b3ab-ee2a3b019df4\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-15T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-22T00:00:00.000Z\",\r\n//     \"totalPrice\": 184.50,\r\n//     \"status\": \"APPROVED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000004-921d-40aa-b1b2-1bc32ade45e0\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-18T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-20T00:00:00.000Z\",\r\n//     \"totalPrice\": 45.00,\r\n//     \"status\": \"COMPLETED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000005-cb21-4112-be22-df3ba129bc34\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-20T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-25T00:00:00.000Z\",\r\n//     \"totalPrice\": 220.00,\r\n//     \"status\": \"CANCELLED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000006-031a-429b-bc9d-fe4a39b2cd81\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-22T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-23T00:00:00.000Z\",\r\n//     \"totalPrice\": 12.00,\r\n//     \"status\": \"PENDING\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000007-449e-4fa2-bc40-221de4089aef\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-25T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-28T00:00:00.000Z\",\r\n//     \"totalPrice\": 135.00,\r\n//     \"status\": \"APPROVED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000008-bc4a-4e11-9a1d-d4fa231bcde4\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-27T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-30T00:00:00.000Z\",\r\n//     \"totalPrice\": 90.50,\r\n//     \"status\": \"COMPLETED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000009-efb1-4cd2-a72d-8bc43a129ebd\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-08-01T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-08-05T00:00:00.000Z\",\r\n//     \"totalPrice\": 160.00,\r\n//     \"status\": \"PENDING\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000010-33af-4921-bc7d-ea41b29cefab\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-08-03T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-08-04T00:00:00.000Z\",\r\n//     \"totalPrice\": 48.00,\r\n//     \"status\": \"APPROVED\"\r\n//   }\r\n// ]"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/rentals/",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "rentals",
+                ""
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "payments",
+      "item": [
+        {
+          "name": "provider",
+          "item": [
+            {
+              "name": "get single payment",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/api/provider/payments/:id",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "provider",
+                    "payments",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": ""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "admin",
+          "item": [
+            {
+              "name": "get single payment",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/api/admin/payments/:id",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "admin",
+                    "payments",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": ""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "payments/create",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"rentalOrderId\": \"06c33470-4456-47ed-8dc8-803a2ce25ace\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/payments/create",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "payments",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "payments/confirm",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"paymentId\": \"6e3c0d4c-96f7-42ec-9af5-5c504a369723\",\r\n    \"rentalOrderId\": \"af0454da-8020-465f-99b6-9a19e9f026a5\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/payments/confirm",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "payments",
+                "confirm"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get own | all payment",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/payments/",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "payments",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get payments by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/payments/:id",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "payments",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "31f8f58c-81f7-4b4e-a153-878b1d6ca30c"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "review",
+      "item": [
+        {
+          "name": "admin",
+          "item": [
+            {
+              "name": "New Request",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/api/admin/reviews/:id",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "admin",
+                    "reviews",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": ""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "New Request",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"rating\": 1,\r\n    \"comment\": \"test review\",\r\n    \"gearItemId\": \"1ec15160-43e5-42a4-9e6e-53d125b82b9f\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/reviews",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "reviews"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "update own review",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"rating\": 3,\r\n    \"comment\": \"test review 2\"\r\n    // \"gearItemId\": \"1ec15160-43e5-42a4-9e6e-53d125b82b9f\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/reviews/:id",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "reviews",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "bcd44d94-8ff7-48c5-8692-e045d64dd171"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get single reviews",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"rating\": 5,\r\n    \"comment\": \"greate gear i love it\",\r\n    \"gearItemId\": \"1ec15160-43e5-42a4-9e6e-53d125b82b9f\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/reviews/:id",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "reviews",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1ec15160-43e5-42a4-9e6e-53d125b82b9f"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "get reviews",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "New Request",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    }
+  ]
+}
