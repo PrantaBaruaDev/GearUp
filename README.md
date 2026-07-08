@@ -2,9 +2,13 @@
 
 GearUp is a backend API for a gear rental and rental management platform. It allows customers to browse gear items, providers to manage their inventory, admins to oversee the system, and users to make rentals and payments.
 
-## **🔗 Live URL**
+## **Live URL**
 
 [https://gear-up-bay.vercel.app/](https://gear-up-bay.vercel.app/)
+
+## **ERD Diagram**
+
+[https://drive.google.com/file/d/1Vj90nIL3xZ9NV1vhkPq9EMLPatL7bAX5/view?usp=sharing](https://drive.google.com/file/d/1Vj90nIL3xZ9NV1vhkPq9EMLPatL7bAX5/view?usp=sharing)
 
 ## Project Overview
 
