@@ -23,9 +23,6 @@ router.delete("/orders/:id", auth(Role.PROVIDER), RentalOrdersController.deleteR
 
 router.get("/payments/:id", auth(Role.PROVIDER), PaymentsController.getSinglePaymentsByID);
 
-router.delete("/review/:id", auth(Role.PROVIDER), ReviewsController.deleteReview);
-
-
 export const ProviderManagementRouter = router;
 
 

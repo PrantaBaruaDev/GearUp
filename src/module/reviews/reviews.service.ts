@@ -77,14 +77,12 @@ class ReviewsService {
         this.validateRating(Number(rating));
         const normalizedComment = this.validateComment(comment);
 
-        const [gearItem, existingReview] = await Promise.all([
-            prisma.gearItems.findUnique({ where: { id: gearItemId } }),
-            prisma.reviews.findFirst({ where: { customerId: user.id, gearItemId } })
+        const gearItem = await Promise.all([
+            prisma.gearItems.findUnique({ where: { id: gearItemId } })
         ]);
 
         if (!gearItem) throw new ApiError(httpStatus.NOT_FOUND, "Gear item not found.");
-        if (existingReview) throw new ApiError(httpStatus.BAD_REQUEST, "You have already reviewed this gear item.");
-
+        
         return prisma.reviews.create({
             data: {
                 customerId: user.id,
@@ -97,12 +95,12 @@ class ReviewsService {
     }
 
     async updateReview(user: IUserJWTPayload, id: IReviewQuery["id"], payload: IUpdateReviewPayload) {
-        if (user.role !== Role.ADMIN) {
-            throw new ApiError(httpStatus.FORBIDDEN, "Forbidden: Only admins can update reviews.");
-        }
-
         const review = await this.getReview(id as string);
         const updates: Record<string, unknown> = {};
+
+        if(user.id !== review.customerId) {
+            throw new ApiError(httpStatus.FORBIDDEN, "Forbidden: Only review owner can update this reviews.");
+        }
 
         if (payload.rating !== undefined) {
             this.validateRating(Number(payload.rating));
@@ -125,15 +123,11 @@ class ReviewsService {
     }
 
     async deleteReview(user: IUserJWTPayload, id: IReviewQuery["id"]) {
-        if (user.role !== Role.PROVIDER && user.role !== Role.ADMIN) {
+        if (user.role !== Role.ADMIN) {
             throw new ApiError(httpStatus.FORBIDDEN, "Forbidden: Only providers and admins can delete reviews.");
         }
 
         const review = await this.getReview(id as string);
-
-        if (user.role === Role.PROVIDER && review.gearItem.providerId !== user.id) {
-            throw new ApiError(httpStatus.FORBIDDEN, "Forbidden: You do not own the gear item for this review.");
-        }
 
         return prisma.reviews.delete({ where: { id: review.id } });
     }

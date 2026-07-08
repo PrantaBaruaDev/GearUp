@@ -8,10 +8,24 @@ import { IRentalOrderPayload, IRentalOrderQuery } from "./rentalOrders.interface
 
 const standardOrderInclude = {
     rentalItems: {
-        include: { gearItem: true }
+        include: { 
+            gearItem: {
+                omit: {
+                    createdAt: true,
+                    updatedAt: true,
+                }
+            } 
+        }
     },
     payment: true,
-    customer: true
+    customer: {
+        omit: {
+            password: true,
+            created_at: true,
+            updated_at: true,
+            status: true,
+        }
+    }
 };
 
 class RentalOrdersService {

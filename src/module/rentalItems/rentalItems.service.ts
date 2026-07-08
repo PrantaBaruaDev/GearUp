@@ -1,7 +1,6 @@
 
 import { IUserJWTPayload } from '../users/users.interface';
-import UserService from '../users/users.service';
-import { IRentalItemsQuery, IRentalItemsPayload } from './rentalItems.interface';
+import { IRentalItemsQuery } from './rentalItems.interface';
 import { Role } from '../../../generated/prisma/enums';
 import { ApiError } from '../../errors/ApiError';
 import httpStatus from 'http-status';
