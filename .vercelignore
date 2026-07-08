@@ -1,0 +1,15 @@
+node_modules
+src
+logs
+.env
+.env.local
+.git
+.gitignore
+README.md
+tsconfig.json
+tsup.config.ts
+tsup.config.d.ts
+tsup.config.d.ts.map
+tsup.config.js
+tsup.config.js.map
+.vercelignore

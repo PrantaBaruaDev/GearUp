@@ -34,7 +34,7 @@ app.use(cookieParser());
 
 const routeList = [
     // Category Routes
-    "Category Route",
+    "<b>Category Route</b>",
     "POST /api/admin/categories",
     "GET /api/categories",
     "GET /api/categories/:ID",
@@ -44,21 +44,58 @@ const routeList = [
     "",
 
     // Gear Item Routes
-    "Gear Routes",
-    "GET /api/gear",
-    "GET /api/gear/:id",
-    "POST /api/provider/gear",
-    "PATCH /api/provider/gear/:id",
+    "<b>Gear Routes</b>",
+    "GET    /api/gear",
+    "GET    /api/gear/:id",
+    "GET    /api/provider/gear",
+    "POST   /api/provider/gear",
+    "PATCH  /api/provider/gear/:id",
     "DELETE /api/provider/gear/:id",
-    "POST /api/admin/gear",
-    "PATCH /api/admin/gear/:id",
+    "POST   /api/admin/gear",
+    "PATCH  /api/admin/gear/:id",
     "DELETE /api/admin/gear/:id",
+    "",
+    "",
 
+    // Rentals Orders
+    "<b>Rentals Orders</b>",
+    "GET    /api/rentals",
+    "GET    /api/rentals/:id",
+    "POST   /api/rentals",
+    "GET    /api/provider/orders", 
+    "GET    /api/provider/orders/:id",
+    "PATCH  /api/provider/orders/:id", 
+    "DELETE /api/provider/orders/:id",
+    "GET    /api/admin/rentals", 
+    "DELETE /api/admin/rentals/:id",
+    "",
+    "",
 
-    "GET /api/rentals",
-    "POST /api/rentals",
+    // Rentals Items
+    "<b>Rentals Items</b>",
+    "GET    /", 
+    "GET    /:id", 
+    "GET    /api/admin/rentals/items", 
+    "",
+    "",
 
+    // payments   
+    "<b>Payments</b>", 
+    "POST   /api/payments/create", 
+    "POST   /api/payments/confirm", 
+    "GET    /api/payments", 
+    "GET    /api/payments/:id", 
+    "",
+    "",
 
+    // Reviews   
+    "<b>Reviews</b>", 
+    "GET    /api/reviews",
+    "GET    /api/reviews/:id",
+    "POST   /api/reviews",
+    "PATCH  /api/reviews/:id",
+    "DELETE /api/admin/reviews/:id",
+    "DELETE /api/provider/reviews/:id",
 ]
 
 app.get("/", (req: Request, res: Response) => {
