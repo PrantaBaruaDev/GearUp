@@ -17,8 +17,3 @@ export interface IPaymentsQuery {
 export interface ICreatePaymentPayload {
     rentalOrderId: string;
 }
-
-export interface IConfirmPaymentPayload {
-    paymentId?: string;
-    rentalOrderId?: string;
-}

@@ -25,7 +25,7 @@ class GearService {
         const { title, brand, category, minPrice, maxPrice, availableOnly } = query;
         const where: Record<string, any> = {};
 
-        if (title?.trim())     
+        if (title?.trim())
             where.title = { 
                 contains: title.trim(), 
                 mode: "insensitive" 
@@ -109,7 +109,12 @@ class GearService {
         ]);
 
         return {
-            meta: { page: parsedPage, limit: parsedLimit, total, totalPages: Math.ceil(total / parsedLimit) },
+            meta: { 
+                page: parsedPage, 
+                limit: parsedLimit, 
+                total, 
+                totalPages: Math.ceil(total / parsedLimit) 
+            },
             data
         };
     }
@@ -172,7 +177,6 @@ class GearService {
         const existingGear = await this.verifyOwnershipOrAdmin(id, userId);
         const updateData: Record<string, any> = {};
 
-        // Clean mapping assignments loop pattern
         const textFields: Array<keyof IUpdateGearItemsPayload> = ['title', 'brand', 'description', 'categoryId'];
         textFields.forEach(field => {
             if (payload[field] !== undefined) {

@@ -91,12 +91,97 @@ class RentalOrdersService {
         }
     }
 
+    private async handlePickupOrderStatus(tx: any, rentalItems: any[]){
+        for (const item of rentalItems) {
+            const gear = await tx.gearItems.findUnique({ 
+                where: { id: item.gearItemId } 
+            });
+            if (!gear) throw new ApiError(httpStatus.NOT_FOUND, "Gear item not found.");
+
+            
+            if (gear.availableStock - item.quantity < 0) {
+                throw new ApiError(httpStatus.BAD_REQUEST, `Not enough available stock for ${gear.title}. Available: ${gear.availableStock}`);
+            }
+
+            await tx.gearItems.update({
+                where: { id: gear.id },
+                data: { 
+                    availableStock: { 
+                        decrement: item.quantity 
+                    }
+                }
+            });
+        }
+    }
+
+    private async handleOrderReturn(tx: any, rentalItems: any[]) {
+        for (const item of rentalItems) {
+            const gear = await tx.gearItems.findUnique({ 
+                where: { id: item.gearItemId } 
+            });
+            if (!gear) throw new ApiError(httpStatus.NOT_FOUND, "Gear item not found.");
+
+            const newAvailableStock = gear.availableStock + item.quantity;
+
+            if (newAvailableStock > gear.stock) {
+                throw new ApiError(
+                    httpStatus.BAD_REQUEST, 
+                    `Cannot return item. Available stock cannot exceed total base stock for ${gear.title}.`
+                );
+            }
+
+            await tx.gearItems.update({
+                where: { id: gear.id },
+                data: { 
+                    availableStock: { 
+                        increment: item.quantity 
+                    } 
+                }
+            });
+        }
+    }
+
+    private async handleItemsUpdate(tx: any, rentalOrderId: string, payloadItems: any[], rentDays: number, updates: Record<string, unknown>) {
+        await tx.rentalItems.deleteMany({ where: { rentalOrderId: rentalOrderId } });
+
+        const gearItemsFromDb = await tx.gearItems.findMany({
+            where: { id: { in: payloadItems.map((i) => i.gearItemId) } }
+        });
+
+        if (gearItemsFromDb.length !== payloadItems.length) {
+            throw new ApiError(httpStatus.NOT_FOUND, "Some requested gear items were missing from stock.");
+        }
+
+        const updatedTotalPrice = this.calculateOrderPrice(payloadItems, gearItemsFromDb, rentDays);
+        updates.totalPrice = new Prisma.Decimal(updatedTotalPrice);
+
+        updates.rentalItems = {
+            create: payloadItems.map((item) => ({
+                gearItemId: item.gearItemId,
+                quantity: item.quantity ?? 1
+            }))
+        };
+    }
+
+    private async handleDatesUpdate(rentalOrder: any, rentDays: number, updates: Record<string, unknown>) {
+        const formattedExistingItems = rentalOrder.rentalItems.map((item: any) => ({
+            gearItemId: item.gearItemId,
+            quantity: item.quantity
+        }));
+        
+        const gearItemsFromDb = rentalOrder.rentalItems.map((item: any) => item.gearItem);
+
+        const updatedTotalPrice = this.calculateOrderPrice(formattedExistingItems, gearItemsFromDb, rentDays);
+        updates.totalPrice = new Prisma.Decimal(updatedTotalPrice);
+    }
+
     async getAllRentalOrders(user: IUserJWTPayload) {
         let orders: any[] = [];
 
         if (user.role === Role.ADMIN) {
             orders = await prisma.rentalOrders.findMany({ include: standardOrderInclude });
-        } else if (user.role === Role.PROVIDER) {
+        } 
+        else if (user.role === Role.PROVIDER) {
             orders = await prisma.rentalOrders.findMany({
                 where: {
                     rentalItems: { 
@@ -149,13 +234,15 @@ class RentalOrdersService {
             throw new ApiError(httpStatus.BAD_REQUEST, "Valid startDate and endDate fields are required.");
         }
         if (startDate >= endDate) {
-            throw new ApiError(httpStatus.BAD_REQUEST, "endDate must be after startDate.");
+            throw new ApiError(httpStatus.BAD_REQUEST, "endDate must be grater then startDate.");
         }
 
         const customerId = user.role === Role.CUSTOMER ? user.id : payload.customerId;
         if (!customerId) throw new ApiError(httpStatus.BAD_REQUEST, "customerId is required.");
 
-        const customer = await prisma.users.findUnique({ where: { id: customerId } });
+        const customer = await prisma.users.findUnique({ 
+            where: { id: customerId } 
+        });
         if (!customer) throw new ApiError(httpStatus.NOT_FOUND, "Customer not found.");
 
         const requestedItems = payload.rentalItems?.length
@@ -231,38 +318,24 @@ class RentalOrdersService {
             const rentDays = this.rentDayCalculation({ startDate, endDate });
 
             if (payload.rentalItems && payload.rentalItems.length > 0) {
-                await tx.rentalItems.deleteMany({ where: { rentalOrderId: rentalOrder.id } });
-
-                const gearItemsFromDb = await tx.gearItems.findMany({
-                    where: { id: { in: payload.rentalItems.map((i) => i.gearItemId) } }
-                });
-
-                if (gearItemsFromDb.length !== payload.rentalItems.length) {
-                    throw new ApiError(httpStatus.NOT_FOUND, "Some requested gear items were missing from stock.");
-                }
-
-                const updatedTotalPrice = this.calculateOrderPrice(payload.rentalItems, gearItemsFromDb, rentDays);
-                updates.totalPrice = new Prisma.Decimal(updatedTotalPrice);
-
-                updates.rentalItems = {
-                    create: payload.rentalItems.map((item) => ({
-                        gearItemId: item.gearItemId,
-                        quantity: item.quantity ?? 1
-                    }))
-                };
-            } else if (payload.startDate !== undefined || payload.endDate !== undefined) {
-                const formattedExistingItems = rentalOrder.rentalItems.map((item: any) => ({
-                    gearItemId: item.gearItemId,
-                    quantity: item.quantity
-                }));
-                const gearItemsFromDb = rentalOrder.rentalItems.map((item: any) => item.gearItem);
-
-                const updatedTotalPrice = this.calculateOrderPrice(formattedExistingItems, gearItemsFromDb, rentDays);
-                updates.totalPrice = new Prisma.Decimal(updatedTotalPrice);
+                await this.handleItemsUpdate(tx, rentalOrder.id, payload.rentalItems, rentDays, updates);
+            } 
+            else if (payload.startDate !== undefined || payload.endDate !== undefined) {
+                await this.handleDatesUpdate(rentalOrder, rentDays, updates)
             }
 
             if (payload.totalPrice !== undefined && !updates.totalPrice) {
                 updates.totalPrice = new Prisma.Decimal(Number(payload.totalPrice));
+            }
+
+            if (payload.status !== undefined && payload.status !== rentalOrder.status) {
+                if(payload.status === OrderStatus.PICKED_UP){
+                    this.handlePickupOrderStatus(tx, rentalOrder.rentalItems);
+                }
+                
+                if(payload.status === OrderStatus.RETURNED){
+                    this.handleOrderReturn(tx, rentalOrder.rentalItems);
+                }
             }
 
             return tx.rentalOrders.update({

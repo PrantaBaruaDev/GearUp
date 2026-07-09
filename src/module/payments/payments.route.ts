@@ -7,8 +7,8 @@ const router = Router();
 
 // /api/payments
 router.post("/create", auth(Role.CUSTOMER, Role.PROVIDER), PaymentsController.createPayments);
-router.post("/confirm", auth(Role.CUSTOMER, Role.PROVIDER), PaymentsController.confirmPayment);
 router.get("/", auth(Role.CUSTOMER, Role.PROVIDER, Role.ADMIN), PaymentsController.getOwnUserPaymentsHistory);
 router.get("/:id", auth(Role.CUSTOMER, Role.PROVIDER, Role.ADMIN), PaymentsController.getSinglePaymentsByID);
 
+router.post("/webhook", PaymentsController.handleStripeWebhook);
 export const PaymentsRoute = router;

@@ -7,7 +7,7 @@ import { config } from "../../config";
 import { prisma } from "../../lib/prisma";
 import { stripe } from "../../lib/stripe"; 
 import { IUserJWTPayload } from "../users/users.interface";
-import { IConfirmPaymentPayload, ICreatePaymentPayload } from "./payments.interface";
+import { ICreatePaymentPayload } from "./payments.interface";
 
 const basePaymentInclude = {
     user: { 
@@ -144,100 +144,80 @@ class PaymentsService {
                 `Payment rejected. Order is ${rentalOrder.status} but must be CONFIRMED by the provider first.`
             );
         }
-
-        return await prisma.$transaction(async (tx) => {
-            
-            const existingPayment = await tx.payments.findUnique({
-                where: { rentalOrderId: rentalOrder.id }
-            });
-
-            if (existingPayment?.status === PaymentStatus.COMPLETED) {
-                return { 
-                    payment: existingPayment, 
-                    checkoutUrl: null, 
-                    message: "Payment already completed." 
-                };
-            }
-
-            const amount = Number(rentalOrder.totalPrice);
-
-            const userFetch = await tx.users.findFirstOrThrow({
-                where: { id: rentalOrder.customerId },
-                include: { profiles: true } 
-            });
-
-            let stripeCustomerId = existingPayment?.stripeCustomerId;
-
-            if (!stripeCustomerId) {
-                const customer = await stripe.customers.create({
-                    email: userFetch.email,
-                    name: userFetch.name,
-                    metadata: { userId: user.id }
-                });
-                stripeCustomerId = customer.id;
-            }
-
-            const payment = existingPayment ?? await tx.payments.create({
-                data: {
-                    userId: user.id,
-                    rentalOrderId: rentalOrder.id,
-                    amount: new Prisma.Decimal(amount),
-                    status: PaymentStatus.PENDING,
-                    stripeCustomerId: stripeCustomerId
-                }
-            });
-
-            const checkoutSession = await stripe.checkout.sessions.create({
-                mode: "payment",
-                payment_method_types: ["card"],
-                customer: stripeCustomerId,
-                line_items: [{
-                    price_data: {
-                        currency: "bdt",
-                        product_data: { name: `GearUp rental order ${rentalOrder.id}` },
-                        unit_amount: Math.round(amount * 100)
-                    },
-                    quantity: 1
-                }],
-                success_url: `${config.app_url}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
-                cancel_url: `${config.app_url}/payment/cancel?session_id={CHECKOUT_SESSION_ID}`,
-                metadata: {
-                    rentalOrderId: rentalOrder.id,
-                    userId: user.id,
-                    paymentId: payment.id
-                }
-            });
-
-            const updatedPayment = await tx.payments.update({
-                where: { id: payment.id },
-                data: {
-                    stripeTransactionId: checkoutSession.id,
-                    stripeCustomerId: stripeCustomerId
-                },
-                include: basePaymentInclude
-            });
-
-            return {
-                payment: updatedPayment,
-                checkoutUrl: checkoutSession.url,
-                message: "Stripe checkout session created successfully."
-            };
+        const existingPayment = await prisma.payments.findUnique({
+            where: { rentalOrderId: rentalOrder.id }
         });
-    }
 
-    async confirmPayment(user: IUserJWTPayload, payload: IConfirmPaymentPayload) {
-        const payment = payload.paymentId
-            ? await this.getPayment(payload.paymentId)
-            : await prisma.payments.findFirst({ where: { rentalOrderId: payload.rentalOrderId } });
+        if (existingPayment?.status === PaymentStatus.COMPLETED) {
+            return { 
+                payment: existingPayment, 
+                checkoutUrl: null, 
+                message: "Payment already completed." 
+            };
+        }
 
-        if (!payment) throw new ApiError(httpStatus.NOT_FOUND, "Payment statement not located.");
-        await this.verifyOrderAccess(user, payment.rentalOrderId);
+        const amount = Number(rentalOrder.totalPrice);
 
-        return prisma.payments.update({
+        const userFetch = await prisma.users.findFirstOrThrow({
+            where: { id: rentalOrder.customerId },
+            include: { profiles: true } 
+        });
+
+        let stripeCustomerId = existingPayment?.stripeCustomerId;
+
+        if (!stripeCustomerId) {
+            const customer = await stripe.customers.create({
+                email: userFetch.email,
+                name: userFetch.name,
+                metadata: { userId: user.id }
+            });
+            stripeCustomerId = customer.id;
+        }
+
+        const payment = existingPayment ?? await prisma.payments.create({
+            data: {
+                userId: user.id,
+                rentalOrderId: rentalOrder.id,
+                amount: new Prisma.Decimal(amount),
+                status: PaymentStatus.PENDING,
+                stripeCustomerId: stripeCustomerId
+            }
+        });
+
+        const checkoutSession = await stripe.checkout.sessions.create({
+            mode: "payment",
+            payment_method_types: ["card"],
+            customer: stripeCustomerId,
+            line_items: [{
+                price_data: {
+                    currency: "bdt",
+                    product_data: { name: `GearUp rental order ${rentalOrder.id}` },
+                    unit_amount: Math.round(amount * 100)
+                },
+                quantity: 1
+            }],
+            success_url: `${config.app_url}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${config.app_url}/payment/cancel?session_id={CHECKOUT_SESSION_ID}`,
+            metadata: {
+                rentalOrderId: rentalOrder.id,
+                userId: user.id,
+                paymentId: payment.id
+            }
+        });
+
+        const updatedPayment = await prisma.payments.update({
             where: { id: payment.id },
-            data: { status: PaymentStatus.COMPLETED, paidAt: new Date() },
+            data: {
+                stripeTransactionId: checkoutSession.id,
+                stripeCustomerId: stripeCustomerId
+            },
             include: basePaymentInclude
         });
+        return {
+            payment: updatedPayment,
+            checkoutUrl: checkoutSession.url,
+            message: "Stripe checkout session created successfully."
+        };
     }
 
     async deletePayment(user: IUserJWTPayload, id: string) {
@@ -268,21 +248,15 @@ class PaymentsService {
             });
             if (!payment) throw new ApiError(httpStatus.NOT_FOUND, "Payment record not found for webhook processing.");
 
-            await prisma.$transaction([
-                prisma.payments.update({
-                    where: { id: payment.id },
-                    data: {
-                        status: PaymentStatus.COMPLETED,
-                        stripeCustomerId: stripeCustomerId ?? undefined,
-                        stripeTransactionId,
-                        paidAt: new Date()
-                    }
-                }),
-                prisma.rentalOrders.update({
-                    where: { id: rentalOrderId },
-                    data: { status: OrderStatus.CONFIRMED } 
-                })
-            ]);
+            prisma.payments.update({
+                where: { id: payment.id },
+                data: {
+                    status: PaymentStatus.COMPLETED,
+                    stripeCustomerId: stripeCustomerId ?? undefined,
+                    stripeTransactionId,
+                    paidAt: new Date()
+                }
+            })
 
             return "Stripe payment process parsed successfully.";
         }

@@ -4,7 +4,7 @@ import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
 import PaymentsService from "./payments.service";
 import { IUserJWTPayload } from "../users/users.interface";
-import { IConfirmPaymentPayload, ICreatePaymentPayload } from "./payments.interface";
+import { ICreatePaymentPayload } from "./payments.interface";
 
 const getOwnUserPaymentsHistory = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const user = req.user as IUserJWTPayload;
@@ -27,19 +27,6 @@ const getSinglePaymentsByID = catchAsync(async (req: Request, res: Response, nex
         success: true,
         statusCode: httpStatus.OK,
         message: "Payment retrieved successfully.",
-        data: payment
-    });
-});
-
-const confirmPayment = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const user = req.user as IUserJWTPayload;
-    const payload = req.body as IConfirmPaymentPayload;
-    const payment = await PaymentsService.confirmPayment(user, payload);
-
-    sendResponse(res, {
-        success: true,
-        statusCode: httpStatus.OK,
-        message: "Payment confirmed successfully.",
         data: payment
     });
 });
@@ -87,7 +74,6 @@ const handleStripeWebhook = catchAsync(async (req: Request, res: Response, next:
 export const PaymentsController = {
     getOwnUserPaymentsHistory,
     getSinglePaymentsByID,
-    confirmPayment,
     createPayments,
     deletePayments,
     handleStripeWebhook
