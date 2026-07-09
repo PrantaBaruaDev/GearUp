@@ -6,7 +6,6 @@ import { Role } from "../../../generated/prisma/enums";
 import { GearsController } from "../gears/gears.controller";
 import { PaymentsController } from "../payments/payments.controller";
 import { RentalOrdersController } from "../rentalOrders/rentalOrders.controller";
-import { ReviewsController } from "../reviews/reviews.controller";
 
 const router = Router();
 

@@ -12,7 +12,6 @@ import { RentalItemsRoute } from "./module/rentalItems/rentalItems.route";
 import { RentalOrdersRoute } from "./module/rentalOrders/rentalOrders.route";
 import { ProviderManagementRouter } from "./module/provider_management/provider.route";
 import { PaymentsRoute } from "./module/payments/payments.route";
-import { PaymentsController } from "./module/payments/payments.controller";
 import { ReviewsRoute } from "./module/reviews/reviews.route";
 import { AdminManagementRouter } from "./module/admin_management/admin.route";
 
@@ -23,13 +22,13 @@ app.use(cors({
     credentials : true,
 }))
 
-app.use(express.urlencoded({ extended : true }));
 app.post(
     "/api/payments/webhook",
-    express.raw({ type: "application/json" }),
-    PaymentsController.handleStripeWebhook
+    express.raw({ type: "application/json" })
 );
+
 app.use(express.json());
+app.use(express.urlencoded({ extended : true }));
 app.use(cookieParser());
 
 const routeList = [
@@ -40,8 +39,6 @@ const routeList = [
     "GET /api/categories/:ID",
     "PATCH /api/admin/categories/:id",
     "DELETE /api/admin/categories/:id",
-    "",
-    "",
 
     // Gear Item Routes
     "<h2>Gear Routes</h2>",
@@ -54,8 +51,6 @@ const routeList = [
     "POST   /api/admin/gear",
     "PATCH  /api/admin/gear/:id",
     "DELETE /api/admin/gear/:id",
-    "",
-    "",
 
     // Rentals Orders
     "<h2>Rentals Orders</h2>",
@@ -68,16 +63,12 @@ const routeList = [
     "DELETE /api/provider/orders/:id",
     "GET    /api/admin/rentals", 
     "DELETE /api/admin/rentals/:id",
-    "",
-    "",
 
     // Rentals Items
     "<h2>Rentals Items</h2>",
     "GET    /", 
     "GET    /:id", 
     "GET    /api/admin/rentals/items", 
-    "",
-    "",
 
     // payments   
     "<h2>Payments</h2>", 
@@ -85,8 +76,6 @@ const routeList = [
     "POST   /api/payments/confirm", 
     "GET    /api/payments", 
     "GET    /api/payments/:id", 
-    "",
-    "",
 
     // Reviews   
     "<h2>Reviews</h2>", 

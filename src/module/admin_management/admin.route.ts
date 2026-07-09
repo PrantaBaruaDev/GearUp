@@ -23,10 +23,10 @@ router.post("/gear", auth(Role.ADMIN), GearsController.createGearItem);
 router.patch("/gear/:id", auth(Role.ADMIN), GearsController.updateGearItem);
 router.delete("/gear/:id", auth(Role.ADMIN), GearsController.deleteGearItem);
 
-
 router.get("/rentals", auth(Role.ADMIN), RentalOrdersController.getAllRentalOrders);
+router.get("/rentals/:id", auth(Role.ADMIN), RentalOrdersController.getSingleRentalOrdersByID);
+router.patch("/rentals/:id", auth(Role.ADMIN), RentalOrdersController.updateRentalOrder);
 router.delete("/rentals/:id", auth(Role.ADMIN), RentalOrdersController.deleteRentalOrder);
-
 
 router.get("/rentals/items", auth(Role.ADMIN), RentalItemsController.getAllRentalItems);
 
