@@ -22,7 +22,7 @@ const getSingleCategoryByID = catchAsync( async(req: Request, res: Response, nex
     sendResponse(res, {
         success: true,
         statusCode: httpStatus.OK,
-        message: "Category created successfully",
+        message: "Category retrieved successfully",
         data: categories,
     });
 })

@@ -1,8 +1,6 @@
 
-import { JwtPayload } from 'jsonwebtoken';
-import { IUserJWTPayload, IUserProfileQuery } from '../users/users.interface';
+import { IUserJWTPayload } from '../users/users.interface';
 import UserService from '../users/users.service';
-import { CategoriesController } from './categories.controller';
 import { ICategoriesQuery, ICreateCategory } from './categories.interface';
 import { Role } from '../../../generated/prisma/enums';
 import { ApiError } from '../../errors/ApiError';
