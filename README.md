@@ -13,8 +13,8 @@ GearUp is a backend API for a gear rental and rental management platform. It all
 ```
 Backend Repo     : https://github.com/PrantaBaruaDev/GearUp.git
 Live API         : https://gear-up-bay.vercel.app/
-API Docs         : 
-Demo Video       : 
+API Docs         : https://github.com/PrantaBaruaDev/GearUp/blob/main/GearUp.postman_collection.json
+Demo Video       : https://drive.google.com/file/d/1lJxgfgcuEImY0pEMhaZxgDYro9x8ITDc/view?usp=sharing
 Admin Email      : pranta.admin@mail.com
 Admin Password   : 1234
 ```
