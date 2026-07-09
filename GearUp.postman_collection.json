@@ -75,7 +75,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "// {\r\n//     \"email\": \"pranta.admin@mail.com\", \r\n//     \"password\": \"1234\"\r\n// }\r\n\r\n// {\r\n//     \"email\": \"pranta2.provider@mail.com\", \r\n//     \"password\": \"1234\"\r\n// }\r\n\r\n{\r\n    \"email\": \"rakib.provider@mail.com\", \r\n    \"password\": \"1234\"\r\n}\r\n\r\n\r\n// { // CUSTOMER ID\r\n//     \"email\": \"prince@mail.com\", \r\n//     \"password\": \"1234\"\r\n// }\r\n\r\n\r\n// { // CUSTOMER ID\r\n//     \"email\": \"mahabub@mail.com\", \r\n//     \"password\": \"1234\"\r\n// }",
+              "raw": "// {\r\n//     \"email\": \"pranta.admin@mail.com\", \r\n//     \"password\": \"1234\"\r\n// }\r\n\r\n// {\r\n//     \"email\": \"pranta2.provider@mail.com\", \r\n//     \"password\": \"1234\"\r\n// }\r\n\r\n// {\r\n//     \"email\": \"rakib.provider@mail.com\", \r\n//     \"password\": \"1234\"\r\n// }\r\n\r\n\r\n// { // CUSTOMER ID\r\n//     \"email\": \"prince@mail.com\", \r\n//     \"password\": \"1234\"\r\n// }\r\n\r\n\r\n{ // CUSTOMER ID\r\n    \"email\": \"mahabub@mail.com\", \r\n    \"password\": \"1234\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -111,14 +111,11 @@
               }
             },
             "url": {
-              "raw": "http://localhost:5000/api/auth/logout",
-              "protocol": "http",
+              "raw": "{{BASE_URL}}api/auth/logout",
               "host": [
-                "localhost"
+                "{{BASE_URL}}api"
               ],
-              "port": "5000",
               "path": [
-                "api",
                 "auth",
                 "logout"
               ]
@@ -225,12 +222,10 @@
               "raw": "[\r\n    { \"name\": \"Camping\" },\r\n    { \"name\": \"Cycling\" },\r\n    { \"name\": \"Water Sports\" },\r\n    { \"name\": \"Cricat Sports\" },\r\n    { \"name\": \"Football Sports\" },\r\n    { \"name\": \"Mountaineer\" },\r\n    { \"name\": \"Batminton Sports\" }\r\n\r\n]\r\n"
             },
             "url": {
-              "raw": "http://localhost:5000/api/categories",
-              "protocol": "http",
+              "raw": "{{BASE_URL}}/api/categories",
               "host": [
-                "localhost"
+                "{{BASE_URL}}"
               ],
-              "port": "5000",
               "path": [
                 "api",
                 "categories"
@@ -276,12 +271,10 @@
               "raw": "[\r\n    { \"name\": \"Camping\" },\r\n    { \"name\": \"Cycling\" },\r\n    { \"name\": \"Water Sports\" },\r\n    { \"name\": \"Cricat Sports\" },\r\n    { \"name\": \"Football Sports\" },\r\n    { \"name\": \"Mountaineer\" },\r\n    { \"name\": \"Batminton Sports\" }\r\n\r\n]\r\n"
             },
             "url": {
-              "raw": "http://localhost:5000/api/admin/categories/:id",
-              "protocol": "http",
+              "raw": "{{BASE_URL}}/api/admin/categories/:id",
               "host": [
-                "localhost"
+                "{{BASE_URL}}"
               ],
-              "port": "5000",
               "path": [
                 "api",
                 "admin",
@@ -379,12 +372,10 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5000/api/provider/gear",
-                  "protocol": "http",
+                  "raw": "{{BASE_URL}}/api/provider/gear",
                   "host": [
-                    "localhost"
+                    "{{BASE_URL}}"
                   ],
-                  "port": "5000",
                   "path": [
                     "api",
                     "provider",
@@ -400,12 +391,10 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5000/api/provider/gear/:id",
-                  "protocol": "http",
+                  "raw": "{{BASE_URL}}/api/provider/gear/:id",
                   "host": [
-                    "localhost"
+                    "{{BASE_URL}}"
                   ],
-                  "port": "5000",
                   "path": [
                     "api",
                     "provider",
@@ -432,12 +421,10 @@
                   "raw": "\r\n  {\r\n    \"title\": \"Ultralight 2-Person Camping Tent\",\r\n    \"description\": \"Waterproof, lightweight backpacking tent with aluminum poles and dual vestibules. Perfect for 3-season hiking.\",\r\n    \"brand\": \"Deuter\",\r\n    \"pricePerDay\": 15.50,\r\n    \"stock\": 5,\r\n    \"availableStock\": 5,\r\n    \"categoryId\": \"0e55a1f6-19c9-4a77-b2bc-42ba6269d996\"\r\n  }\r\n//   {\r\n//     \"title\": \"Marmot 0°F Down Sleeping Bag\",\r\n//     \"description\": \"Premium 650-fill-power down sleeping bag designed for sub-zero alpine environments and winter camping.\",\r\n//     \"brand\": \"Marmot\",\r\n//     \"pricePerDay\": 12.00,\r\n//     \"stock\": 8,\r\n//     \"availableStock\": 8,\r\n//     \"categoryId\": \"0e55a1f6-19c9-4a77-b2bc-42ba6269d996\"\r\n//   },\r\n//   {\r\n//     \"title\": \"21-Speed Mountain Trail Bike\",\r\n//     \"description\": \"Hardtail mountain bike with front suspension, mechanical disc brakes, and durable all-terrain tires.\",\r\n//     \"brand\": \"Trek\",\r\n//     \"pricePerDay\": 25.00,\r\n//     \"stock\": 4,\r\n//     \"availableStock\": 4,\r\n//     \"categoryId\": \"25ab9058-6445-428f-933f-ed94b8a27eb6\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Inflatable Stand-Up Paddleboard (SUP)\",\r\n//     \"description\": \"10-foot stable paddleboard kit. Includes dual-action pump, adjustable aluminum paddle, travel backpack, and safety leash.\",\r\n//     \"brand\": \"Aqua Marina\",\r\n//     \"pricePerDay\": 30.00,\r\n//     \"stock\": 6,\r\n//     \"availableStock\": 6,\r\n//     \"categoryId\": \"97d64634-7840-48b5-aa1f-1bac22258c2a\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Premium English Willow Cricket Bat\",\r\n//     \"description\": \"Grade 1 English Willow professional cricket bat with a sweet spot optimized for heavy hitting.\",\r\n//     \"brand\": \"SS Cricket\",\r\n//     \"pricePerDay\": 10.00,\r\n//     \"stock\": 10,\r\n//     \"availableStock\": 10,\r\n//     \"categoryId\": \"16c2aa0f-6e84-4dbc-bc26-b51f0e71817a\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Leather Match Football (Size 5)\",\r\n//     \"description\": \"FIFA-quality pro match football featuring thermo-bonded seamless surface for more predictable trajectory.\",\r\n//     \"brand\": \"Adidas\",\r\n//     \"pricePerDay\": 5.00,\r\n//     \"stock\": 15,\r\n//     \"availableStock\": 15,\r\n//     \"categoryId\": \"4a33c7dd-f55f-4cff-9f9c-062000b20cf3\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Carbon Fiber Trekking Poles (Pair)\",\r\n//     \"description\": \"Adjustable quick-lock hiking sticks with anti-shock technology and sweat-wicking EVA foam grips.\",\r\n//     \"brand\": \"Black Diamond\",\r\n//     \"pricePerDay\": 7.50,\r\n//     \"stock\": 12,\r\n//     \"availableStock\": 12,\r\n//     \"categoryId\": \"31457275-ca63-4714-96bc-442d2a18aa8f\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Professional Graphite Badminton Racket\",\r\n//     \"description\": \"High-modulus carbon graphite frame badminton racket offering ultra-fast swing speeds and crisp offensive power.\",\r\n//     \"brand\": \"Yonex\",\r\n//     \"pricePerDay\": 6.50,\r\n//     \"stock\": 8,\r\n//     \"availableStock\": 8,\r\n//     \"categoryId\": \"f551ee51-665b-4002-8b1d-c82958ec4d01\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Adult Hybrid Life Jacket / PFD\",\r\n//     \"description\": \"High-visibility coast-guard approved life vest with adjustable straps and front zip utility pockets.\",\r\n//     \"brand\": \"O'Neill\",\r\n//     \"pricePerDay\": 6.00,\r\n//     \"stock\": 20,\r\n//     \"availableStock\": 20,\r\n//     \"categoryId\": \"97d64634-7840-48b5-aa1f-1bac22258c2a\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Nylon Shuttles / Birdies (6-Pack)\",\r\n//     \"description\": \"Precision-manufactured nylon shuttlecocks engineered for stable trajectory and long-lasting durability.\",\r\n//     \"brand\": \"Yonex\",\r\n//     \"pricePerDay\": 2.00,\r\n//     \"stock\": 25,\r\n//     \"availableStock\": 25,\r\n//     \"categoryId\": \"f551ee51-665b-4002-8b1d-c82958ec4d01\"\r\n//   }\r\n"
                 },
                 "url": {
-                  "raw": "http://localhost:5000/api/provider/gear/46e3c823-a6ba-456c-aa38-90784a548ffc",
-                  "protocol": "http",
+                  "raw": "{{BASE_URL}}/api/provider/gear/46e3c823-a6ba-456c-aa38-90784a548ffc",
                   "host": [
-                    "localhost"
+                    "{{BASE_URL}}"
                   ],
-                  "port": "5000",
                   "path": [
                     "api",
                     "provider",
@@ -496,12 +483,10 @@
                   }
                 },
                 "url": {
-                  "raw": "http://localhost:5000/api/admin/gear/96ccbacb-0937-4a7d-902d-6b9ebdbd4628",
-                  "protocol": "http",
+                  "raw": "{{BASE_URL}}/api/admin/gear/96ccbacb-0937-4a7d-902d-6b9ebdbd4628",
                   "host": [
-                    "localhost"
+                    "{{BASE_URL}}"
                   ],
-                  "port": "5000",
                   "path": [
                     "api",
                     "admin",
@@ -518,16 +503,29 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5000/api/admin/gear",
-                  "protocol": "http",
+                  "raw": "{{BASE_URL}}/api/admin/gear/:id",
                   "host": [
-                    "localhost"
+                    "{{BASE_URL}}"
                   ],
-                  "port": "5000",
                   "path": [
                     "api",
                     "admin",
-                    "gear"
+                    "gear",
+                    ":id"
+                  ],
+                  "query": [
+                    {
+                      "key": "availableOnly",
+                      "value": "false",
+                      "type": "text",
+                      "disabled": true
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "96ccbacb-0937-4a7d-902d-6b9ebdbd4628"
+                    }
                   ]
                 }
               },
@@ -539,12 +537,10 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:5000/api/admin/gear",
-                  "protocol": "http",
+                  "raw": "{{BASE_URL}}/api/admin/gear",
                   "host": [
-                    "localhost"
+                    "{{BASE_URL}}"
                   ],
-                  "port": "5000",
                   "path": [
                     "api",
                     "admin",
@@ -564,12 +560,10 @@
                   "raw": "\r\n  {\r\n    \"title\": \"Ultralight 2-Person Camping Tent\",\r\n    \"description\": \"Waterproof, lightweight backpacking tent with aluminum poles and dual vestibules. Perfect for 3-season hiking.\",\r\n    \"brand\": \"Deuter\",\r\n    \"pricePerDay\": 15.50,\r\n    \"stock\": 5,\r\n    \"availableStock\": 5,\r\n    \"categoryId\": \"0e55a1f6-19c9-4a77-b2bc-42ba6269d996\"\r\n  }\r\n//   {\r\n//     \"title\": \"Marmot 0°F Down Sleeping Bag\",\r\n//     \"description\": \"Premium 650-fill-power down sleeping bag designed for sub-zero alpine environments and winter camping.\",\r\n//     \"brand\": \"Marmot\",\r\n//     \"pricePerDay\": 12.00,\r\n//     \"stock\": 8,\r\n//     \"availableStock\": 8,\r\n//     \"categoryId\": \"0e55a1f6-19c9-4a77-b2bc-42ba6269d996\"\r\n//   },\r\n//   {\r\n//     \"title\": \"21-Speed Mountain Trail Bike\",\r\n//     \"description\": \"Hardtail mountain bike with front suspension, mechanical disc brakes, and durable all-terrain tires.\",\r\n//     \"brand\": \"Trek\",\r\n//     \"pricePerDay\": 25.00,\r\n//     \"stock\": 4,\r\n//     \"availableStock\": 4,\r\n//     \"categoryId\": \"25ab9058-6445-428f-933f-ed94b8a27eb6\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Inflatable Stand-Up Paddleboard (SUP)\",\r\n//     \"description\": \"10-foot stable paddleboard kit. Includes dual-action pump, adjustable aluminum paddle, travel backpack, and safety leash.\",\r\n//     \"brand\": \"Aqua Marina\",\r\n//     \"pricePerDay\": 30.00,\r\n//     \"stock\": 6,\r\n//     \"availableStock\": 6,\r\n//     \"categoryId\": \"97d64634-7840-48b5-aa1f-1bac22258c2a\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Premium English Willow Cricket Bat\",\r\n//     \"description\": \"Grade 1 English Willow professional cricket bat with a sweet spot optimized for heavy hitting.\",\r\n//     \"brand\": \"SS Cricket\",\r\n//     \"pricePerDay\": 10.00,\r\n//     \"stock\": 10,\r\n//     \"availableStock\": 10,\r\n//     \"categoryId\": \"16c2aa0f-6e84-4dbc-bc26-b51f0e71817a\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Leather Match Football (Size 5)\",\r\n//     \"description\": \"FIFA-quality pro match football featuring thermo-bonded seamless surface for more predictable trajectory.\",\r\n//     \"brand\": \"Adidas\",\r\n//     \"pricePerDay\": 5.00,\r\n//     \"stock\": 15,\r\n//     \"availableStock\": 15,\r\n//     \"categoryId\": \"4a33c7dd-f55f-4cff-9f9c-062000b20cf3\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Carbon Fiber Trekking Poles (Pair)\",\r\n//     \"description\": \"Adjustable quick-lock hiking sticks with anti-shock technology and sweat-wicking EVA foam grips.\",\r\n//     \"brand\": \"Black Diamond\",\r\n//     \"pricePerDay\": 7.50,\r\n//     \"stock\": 12,\r\n//     \"availableStock\": 12,\r\n//     \"categoryId\": \"31457275-ca63-4714-96bc-442d2a18aa8f\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Professional Graphite Badminton Racket\",\r\n//     \"description\": \"High-modulus carbon graphite frame badminton racket offering ultra-fast swing speeds and crisp offensive power.\",\r\n//     \"brand\": \"Yonex\",\r\n//     \"pricePerDay\": 6.50,\r\n//     \"stock\": 8,\r\n//     \"availableStock\": 8,\r\n//     \"categoryId\": \"f551ee51-665b-4002-8b1d-c82958ec4d01\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Adult Hybrid Life Jacket / PFD\",\r\n//     \"description\": \"High-visibility coast-guard approved life vest with adjustable straps and front zip utility pockets.\",\r\n//     \"brand\": \"O'Neill\",\r\n//     \"pricePerDay\": 6.00,\r\n//     \"stock\": 20,\r\n//     \"availableStock\": 20,\r\n//     \"categoryId\": \"97d64634-7840-48b5-aa1f-1bac22258c2a\"\r\n//   },\r\n//   {\r\n//     \"title\": \"Nylon Shuttles / Birdies (6-Pack)\",\r\n//     \"description\": \"Precision-manufactured nylon shuttlecocks engineered for stable trajectory and long-lasting durability.\",\r\n//     \"brand\": \"Yonex\",\r\n//     \"pricePerDay\": 2.00,\r\n//     \"stock\": 25,\r\n//     \"availableStock\": 25,\r\n//     \"categoryId\": \"f551ee51-665b-4002-8b1d-c82958ec4d01\"\r\n//   }\r\n"
                 },
                 "url": {
-                  "raw": "http://localhost:5000/api/admin/gear/:id",
-                  "protocol": "http",
+                  "raw": "{{BASE_URL}}/api/admin/gear/:id",
                   "host": [
-                    "localhost"
+                    "{{BASE_URL}}"
                   ],
-                  "port": "5000",
                   "path": [
                     "api",
                     "admin",
@@ -606,7 +600,7 @@
               }
             },
             "url": {
-              "raw": "{{BASE_URL}}/api/gear?availableOnly=true&category=Camping&brand=Marmot&minPrice=10&maxPrice=20",
+              "raw": "{{BASE_URL}}/api/gear",
               "host": [
                 "{{BASE_URL}}"
               ],
@@ -617,23 +611,28 @@
               "query": [
                 {
                   "key": "availableOnly",
-                  "value": "true"
+                  "value": "true",
+                  "disabled": true
                 },
                 {
                   "key": "category",
-                  "value": "Camping"
+                  "value": "Camping",
+                  "disabled": true
                 },
                 {
                   "key": "brand",
-                  "value": "Marmot"
+                  "value": "Marmot",
+                  "disabled": true
                 },
                 {
                   "key": "minPrice",
-                  "value": "10"
+                  "value": "10",
+                  "disabled": true
                 },
                 {
                   "key": "maxPrice",
-                  "value": "20"
+                  "value": "20",
+                  "disabled": true
                 }
               ]
             }

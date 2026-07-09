@@ -47,10 +47,8 @@ class CategoriesService{
             throw new ApiError(httpStatus.FORBIDDEN, "Forbidden: Only Admin can add category!");
         }
 
-        // Extract and clean names from the array payload
         const categoryNames = payload.map(item => item.name.trim());
 
-        // Fetch any categories that already exist in the DB to avoid crashes
         const existingCategories = await prisma.category.findMany({
             where: {
                 name: { in: categoryNames }
@@ -60,12 +58,10 @@ class CategoriesService{
 
         const existingNames = existingCategories.map(c => c.name);
 
-        // Filter out the duplicates, leaving only brand new categories
         const newCategoriesData = payload
             .map(item => ({ name: item.name.trim() }))
             .filter(item => !existingNames.includes(item.name));
 
-        // If everything sent already exists, let the user know gracefully
         if (newCategoriesData.length === 0) {
             throw new ApiError(
                 httpStatus.BAD_REQUEST,
@@ -73,7 +69,6 @@ class CategoriesService{
             );
         }
 
-        // Bulk insert the new categories and return them safely
         const createdCategories = await prisma.category.createManyAndReturn({
             data: newCategoriesData,
             skipDuplicates: true 
@@ -95,13 +90,11 @@ class CategoriesService{
             throw new ApiError(httpStatus.BAD_REQUEST, "Category name is required.");
         }
 
-        // Ensure category to update exists
         const existing = await prisma.category.findUnique({ where: { id } });
         if (!existing) {
             throw new ApiError(httpStatus.NOT_FOUND, "Category not found.");
         }
 
-        // If changing name, ensure no other category has the same name
         if (newName && newName !== existing.name) {
             const conflict = await prisma.category.findFirst({ where: { name: newName } });
             if (conflict && conflict.id !== id) {

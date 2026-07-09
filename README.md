@@ -10,6 +10,15 @@ GearUp is a backend API for a gear rental and rental management platform. It all
 
 [https://drive.google.com/file/d/1Vj90nIL3xZ9NV1vhkPq9EMLPatL7bAX5/view?usp=sharing](https://drive.google.com/file/d/1Vj90nIL3xZ9NV1vhkPq9EMLPatL7bAX5/view?usp=sharing)
 
+```
+Backend Repo     : https://github.com/PrantaBaruaDev/GearUp.git
+Live API         : https://gear-up-bay.vercel.app/
+API Docs         : 
+Demo Video       : 
+Admin Email      : pranta.admin@mail.com
+Admin Password   : 1234
+```
+
 ## Project Overview
 
 This project is built as a RESTful API using Node.js, Express.js, TypeScript, Prisma ORM, and PostgreSQL. The system supports:
