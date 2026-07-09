@@ -897,7 +897,12 @@ var GearService = class {
       prisma.gearItems.count({ where })
     ]);
     return {
-      meta: { page: parsedPage, limit: parsedLimit, total, totalPages: Math.ceil(total / parsedLimit) },
+      meta: {
+        page: parsedPage,
+        limit: parsedLimit,
+        total,
+        totalPages: Math.ceil(total / parsedLimit)
+      },
       data
     };
   }
@@ -1237,7 +1242,7 @@ var getSingleCategoryByID = catchAsync(async (req, res, next) => {
   sendResponse(res, {
     success: true,
     statusCode: httpStatus9.OK,
-    message: "Category created successfully",
+    message: "Category retrieved successfully",
     data: categories
   });
 });
@@ -1484,6 +1489,74 @@ var RentalOrdersService = class {
       throw new ApiError(httpStatus12.FORBIDDEN, "Forbidden: You do not own this rental order.");
     }
   }
+  async handlePickupOrderStatus(tx, rentalItems) {
+    for (const item of rentalItems) {
+      const gear = await tx.gearItems.findUnique({
+        where: { id: item.gearItemId }
+      });
+      if (!gear) throw new ApiError(httpStatus12.NOT_FOUND, "Gear item not found.");
+      if (gear.availableStock - item.quantity < 0) {
+        throw new ApiError(httpStatus12.BAD_REQUEST, `Not enough available stock for ${gear.title}. Available: ${gear.availableStock}`);
+      }
+      await tx.gearItems.update({
+        where: { id: gear.id },
+        data: {
+          availableStock: {
+            decrement: item.quantity
+          }
+        }
+      });
+    }
+  }
+  async handleOrderReturn(tx, rentalItems) {
+    for (const item of rentalItems) {
+      const gear = await tx.gearItems.findUnique({
+        where: { id: item.gearItemId }
+      });
+      if (!gear) throw new ApiError(httpStatus12.NOT_FOUND, "Gear item not found.");
+      const newAvailableStock = gear.availableStock + item.quantity;
+      if (newAvailableStock > gear.stock) {
+        throw new ApiError(
+          httpStatus12.BAD_REQUEST,
+          `Cannot return item. Available stock cannot exceed total base stock for ${gear.title}.`
+        );
+      }
+      await tx.gearItems.update({
+        where: { id: gear.id },
+        data: {
+          availableStock: {
+            increment: item.quantity
+          }
+        }
+      });
+    }
+  }
+  async handleItemsUpdate(tx, rentalOrderId, payloadItems, rentDays, updates) {
+    await tx.rentalItems.deleteMany({ where: { rentalOrderId } });
+    const gearItemsFromDb = await tx.gearItems.findMany({
+      where: { id: { in: payloadItems.map((i) => i.gearItemId) } }
+    });
+    if (gearItemsFromDb.length !== payloadItems.length) {
+      throw new ApiError(httpStatus12.NOT_FOUND, "Some requested gear items were missing from stock.");
+    }
+    const updatedTotalPrice = this.calculateOrderPrice(payloadItems, gearItemsFromDb, rentDays);
+    updates.totalPrice = new prismaNamespace_exports.Decimal(updatedTotalPrice);
+    updates.rentalItems = {
+      create: payloadItems.map((item) => ({
+        gearItemId: item.gearItemId,
+        quantity: item.quantity ?? 1
+      }))
+    };
+  }
+  async handleDatesUpdate(rentalOrder, rentDays, updates) {
+    const formattedExistingItems = rentalOrder.rentalItems.map((item) => ({
+      gearItemId: item.gearItemId,
+      quantity: item.quantity
+    }));
+    const gearItemsFromDb = rentalOrder.rentalItems.map((item) => item.gearItem);
+    const updatedTotalPrice = this.calculateOrderPrice(formattedExistingItems, gearItemsFromDb, rentDays);
+    updates.totalPrice = new prismaNamespace_exports.Decimal(updatedTotalPrice);
+  }
   async getAllRentalOrders(user) {
     let orders = [];
     if (user.role === Role.ADMIN) {
@@ -1534,11 +1607,13 @@ var RentalOrdersService = class {
       throw new ApiError(httpStatus12.BAD_REQUEST, "Valid startDate and endDate fields are required.");
     }
     if (startDate >= endDate) {
-      throw new ApiError(httpStatus12.BAD_REQUEST, "endDate must be after startDate.");
+      throw new ApiError(httpStatus12.BAD_REQUEST, "endDate must be grater then startDate.");
     }
     const customerId = user.role === Role.CUSTOMER ? user.id : payload.customerId;
     if (!customerId) throw new ApiError(httpStatus12.BAD_REQUEST, "customerId is required.");
-    const customer = await prisma.users.findUnique({ where: { id: customerId } });
+    const customer = await prisma.users.findUnique({
+      where: { id: customerId }
+    });
     if (!customer) throw new ApiError(httpStatus12.NOT_FOUND, "Customer not found.");
     const requestedItems = payload.rentalItems?.length ? payload.rentalItems : payload.gearItemsIds?.map((gearItemId) => ({ gearItemId, quantity: 1 })) ?? [];
     if (requestedItems.length === 0) {
@@ -1596,32 +1671,20 @@ var RentalOrdersService = class {
       if (payload.status !== void 0) updates.status = payload.status;
       const rentDays = this.rentDayCalculation({ startDate, endDate });
       if (payload.rentalItems && payload.rentalItems.length > 0) {
-        await tx.rentalItems.deleteMany({ where: { rentalOrderId: rentalOrder.id } });
-        const gearItemsFromDb = await tx.gearItems.findMany({
-          where: { id: { in: payload.rentalItems.map((i) => i.gearItemId) } }
-        });
-        if (gearItemsFromDb.length !== payload.rentalItems.length) {
-          throw new ApiError(httpStatus12.NOT_FOUND, "Some requested gear items were missing from stock.");
-        }
-        const updatedTotalPrice = this.calculateOrderPrice(payload.rentalItems, gearItemsFromDb, rentDays);
-        updates.totalPrice = new prismaNamespace_exports.Decimal(updatedTotalPrice);
-        updates.rentalItems = {
-          create: payload.rentalItems.map((item) => ({
-            gearItemId: item.gearItemId,
-            quantity: item.quantity ?? 1
-          }))
-        };
+        await this.handleItemsUpdate(tx, rentalOrder.id, payload.rentalItems, rentDays, updates);
       } else if (payload.startDate !== void 0 || payload.endDate !== void 0) {
-        const formattedExistingItems = rentalOrder.rentalItems.map((item) => ({
-          gearItemId: item.gearItemId,
-          quantity: item.quantity
-        }));
-        const gearItemsFromDb = rentalOrder.rentalItems.map((item) => item.gearItem);
-        const updatedTotalPrice = this.calculateOrderPrice(formattedExistingItems, gearItemsFromDb, rentDays);
-        updates.totalPrice = new prismaNamespace_exports.Decimal(updatedTotalPrice);
+        await this.handleDatesUpdate(rentalOrder, rentDays, updates);
       }
       if (payload.totalPrice !== void 0 && !updates.totalPrice) {
         updates.totalPrice = new prismaNamespace_exports.Decimal(Number(payload.totalPrice));
+      }
+      if (payload.status !== void 0 && payload.status !== rentalOrder.status) {
+        if (payload.status === OrderStatus.PICKED_UP) {
+          this.handlePickupOrderStatus(tx, rentalOrder.rentalItems);
+        }
+        if (payload.status === OrderStatus.RETURNED) {
+          this.handleOrderReturn(tx, rentalOrder.rentalItems);
+        }
       }
       return tx.rentalOrders.update({
         where: { id },
@@ -1854,84 +1917,72 @@ var PaymentsService = class {
         `Payment rejected. Order is ${rentalOrder.status} but must be CONFIRMED by the provider first.`
       );
     }
-    return await prisma.$transaction(async (tx) => {
-      const existingPayment = await tx.payments.findUnique({
-        where: { rentalOrderId: rentalOrder.id }
-      });
-      if (existingPayment?.status === PaymentStatus.COMPLETED) {
-        return {
-          payment: existingPayment,
-          checkoutUrl: null,
-          message: "Payment already completed."
-        };
-      }
-      const amount = Number(rentalOrder.totalPrice);
-      const userFetch = await tx.users.findFirstOrThrow({
-        where: { id: rentalOrder.customerId },
-        include: { profiles: true }
-      });
-      let stripeCustomerId = existingPayment?.stripeCustomerId;
-      if (!stripeCustomerId) {
-        const customer = await stripe.customers.create({
-          email: userFetch.email,
-          name: userFetch.name,
-          metadata: { userId: user.id }
-        });
-        stripeCustomerId = customer.id;
-      }
-      const payment = existingPayment ?? await tx.payments.create({
-        data: {
-          userId: user.id,
-          rentalOrderId: rentalOrder.id,
-          amount: new prismaNamespace_exports.Decimal(amount),
-          status: PaymentStatus.PENDING,
-          stripeCustomerId
-        }
-      });
-      const checkoutSession = await stripe.checkout.sessions.create({
-        mode: "payment",
-        payment_method_types: ["card"],
-        customer: stripeCustomerId,
-        line_items: [{
-          price_data: {
-            currency: "bdt",
-            product_data: { name: `GearUp rental order ${rentalOrder.id}` },
-            unit_amount: Math.round(amount * 100)
-          },
-          quantity: 1
-        }],
-        success_url: `${config2.app_url}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${config2.app_url}/payment/cancel?session_id={CHECKOUT_SESSION_ID}`,
-        metadata: {
-          rentalOrderId: rentalOrder.id,
-          userId: user.id,
-          paymentId: payment.id
-        }
-      });
-      const updatedPayment = await tx.payments.update({
-        where: { id: payment.id },
-        data: {
-          stripeTransactionId: checkoutSession.id,
-          stripeCustomerId
-        },
-        include: basePaymentInclude
-      });
-      return {
-        payment: updatedPayment,
-        checkoutUrl: checkoutSession.url,
-        message: "Stripe checkout session created successfully."
-      };
+    const existingPayment = await prisma.payments.findUnique({
+      where: { rentalOrderId: rentalOrder.id }
     });
-  }
-  async confirmPayment(user, payload) {
-    const payment = payload.paymentId ? await this.getPayment(payload.paymentId) : await prisma.payments.findFirst({ where: { rentalOrderId: payload.rentalOrderId } });
-    if (!payment) throw new ApiError(httpStatus14.NOT_FOUND, "Payment statement not located.");
-    await this.verifyOrderAccess(user, payment.rentalOrderId);
-    return prisma.payments.update({
+    if (existingPayment?.status === PaymentStatus.COMPLETED) {
+      return {
+        payment: existingPayment,
+        checkoutUrl: null,
+        message: "Payment already completed."
+      };
+    }
+    const amount = Number(rentalOrder.totalPrice);
+    const userFetch = await prisma.users.findFirstOrThrow({
+      where: { id: rentalOrder.customerId },
+      include: { profiles: true }
+    });
+    let stripeCustomerId = existingPayment?.stripeCustomerId;
+    if (!stripeCustomerId) {
+      const customer = await stripe.customers.create({
+        email: userFetch.email,
+        name: userFetch.name,
+        metadata: { userId: user.id }
+      });
+      stripeCustomerId = customer.id;
+    }
+    const payment = existingPayment ?? await prisma.payments.create({
+      data: {
+        userId: user.id,
+        rentalOrderId: rentalOrder.id,
+        amount: new prismaNamespace_exports.Decimal(amount),
+        status: PaymentStatus.PENDING,
+        stripeCustomerId
+      }
+    });
+    const checkoutSession = await stripe.checkout.sessions.create({
+      mode: "payment",
+      payment_method_types: ["card"],
+      customer: stripeCustomerId,
+      line_items: [{
+        price_data: {
+          currency: "bdt",
+          product_data: { name: `GearUp rental order ${rentalOrder.id}` },
+          unit_amount: Math.round(amount * 100)
+        },
+        quantity: 1
+      }],
+      success_url: `${config2.app_url}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${config2.app_url}/payment/cancel?session_id={CHECKOUT_SESSION_ID}`,
+      metadata: {
+        rentalOrderId: rentalOrder.id,
+        userId: user.id,
+        paymentId: payment.id
+      }
+    });
+    const updatedPayment = await prisma.payments.update({
       where: { id: payment.id },
-      data: { status: PaymentStatus.COMPLETED, paidAt: /* @__PURE__ */ new Date() },
+      data: {
+        stripeTransactionId: checkoutSession.id,
+        stripeCustomerId
+      },
       include: basePaymentInclude
     });
+    return {
+      payment: updatedPayment,
+      checkoutUrl: checkoutSession.url,
+      message: "Stripe checkout session created successfully."
+    };
   }
   async deletePayment(user, id) {
     const payment = await this.getPayment(id);
@@ -1955,21 +2006,15 @@ var PaymentsService = class {
         where: { OR: [{ id: paymentId ?? "" }, { rentalOrderId }] }
       });
       if (!payment) throw new ApiError(httpStatus14.NOT_FOUND, "Payment record not found for webhook processing.");
-      await prisma.$transaction([
-        prisma.payments.update({
-          where: { id: payment.id },
-          data: {
-            status: PaymentStatus.COMPLETED,
-            stripeCustomerId: stripeCustomerId ?? void 0,
-            stripeTransactionId,
-            paidAt: /* @__PURE__ */ new Date()
-          }
-        }),
-        prisma.rentalOrders.update({
-          where: { id: rentalOrderId },
-          data: { status: OrderStatus.CONFIRMED }
-        })
-      ]);
+      prisma.payments.update({
+        where: { id: payment.id },
+        data: {
+          status: PaymentStatus.COMPLETED,
+          stripeCustomerId: stripeCustomerId ?? void 0,
+          stripeTransactionId,
+          paidAt: /* @__PURE__ */ new Date()
+        }
+      });
       return "Stripe payment process parsed successfully.";
     }
     return `Unhandled event wrapper: ${event.type}`;
@@ -1996,17 +2041,6 @@ var getSinglePaymentsByID = catchAsync(async (req, res, next) => {
     success: true,
     statusCode: httpStatus15.OK,
     message: "Payment retrieved successfully.",
-    data: payment
-  });
-});
-var confirmPayment = catchAsync(async (req, res, next) => {
-  const user = req.user;
-  const payload = req.body;
-  const payment = await payments_service_default.confirmPayment(user, payload);
-  sendResponse(res, {
-    success: true,
-    statusCode: httpStatus15.OK,
-    message: "Payment confirmed successfully.",
     data: payment
   });
 });
@@ -2046,7 +2080,6 @@ var handleStripeWebhook = catchAsync(async (req, res, next) => {
 var PaymentsController = {
   getOwnUserPaymentsHistory,
   getSinglePaymentsByID,
-  confirmPayment,
   createPayments,
   deletePayments,
   handleStripeWebhook
@@ -2069,9 +2102,9 @@ var ProviderManagementRouter = router7;
 import { Router as Router8 } from "express";
 var router8 = Router8();
 router8.post("/create", auth(Role.CUSTOMER, Role.PROVIDER), PaymentsController.createPayments);
-router8.post("/confirm", auth(Role.CUSTOMER, Role.PROVIDER), PaymentsController.confirmPayment);
 router8.get("/", auth(Role.CUSTOMER, Role.PROVIDER, Role.ADMIN), PaymentsController.getOwnUserPaymentsHistory);
 router8.get("/:id", auth(Role.CUSTOMER, Role.PROVIDER, Role.ADMIN), PaymentsController.getSinglePaymentsByID);
+router8.post("/webhook", PaymentsController.handleStripeWebhook);
 var PaymentsRoute = router8;
 
 // src/module/reviews/reviews.route.ts
@@ -2265,6 +2298,8 @@ router10.post("/gear", auth(Role.ADMIN), GearsController.createGearItem);
 router10.patch("/gear/:id", auth(Role.ADMIN), GearsController.updateGearItem);
 router10.delete("/gear/:id", auth(Role.ADMIN), GearsController.deleteGearItem);
 router10.get("/rentals", auth(Role.ADMIN), RentalOrdersController.getAllRentalOrders);
+router10.get("/rentals/:id", auth(Role.ADMIN), RentalOrdersController.getSingleRentalOrdersByID);
+router10.patch("/rentals/:id", auth(Role.ADMIN), RentalOrdersController.updateRentalOrder);
 router10.delete("/rentals/:id", auth(Role.ADMIN), RentalOrdersController.deleteRentalOrder);
 router10.get("/rentals/items", auth(Role.ADMIN), RentalItemsController.getAllRentalItems);
 router10.post("/categories/", auth(Role.ADMIN), CategoriesController.createCategory);
@@ -2280,13 +2315,12 @@ app.use(cors({
   origin: config2.app_url,
   credentials: true
 }));
-app.use(express.urlencoded({ extended: true }));
 app.post(
   "/api/payments/webhook",
-  express.raw({ type: "application/json" }),
-  PaymentsController.handleStripeWebhook
+  express.raw({ type: "application/json" })
 );
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 var routeList = [
   // Category Routes
@@ -2296,8 +2330,6 @@ var routeList = [
   "GET /api/categories/:ID",
   "PATCH /api/admin/categories/:id",
   "DELETE /api/admin/categories/:id",
-  "",
-  "",
   // Gear Item Routes
   "<h2>Gear Routes</h2>",
   "GET    /api/gear",
@@ -2309,8 +2341,6 @@ var routeList = [
   "POST   /api/admin/gear",
   "PATCH  /api/admin/gear/:id",
   "DELETE /api/admin/gear/:id",
-  "",
-  "",
   // Rentals Orders
   "<h2>Rentals Orders</h2>",
   "GET    /api/rentals",
@@ -2322,23 +2352,17 @@ var routeList = [
   "DELETE /api/provider/orders/:id",
   "GET    /api/admin/rentals",
   "DELETE /api/admin/rentals/:id",
-  "",
-  "",
   // Rentals Items
   "<h2>Rentals Items</h2>",
   "GET    /",
   "GET    /:id",
   "GET    /api/admin/rentals/items",
-  "",
-  "",
   // payments   
   "<h2>Payments</h2>",
   "POST   /api/payments/create",
   "POST   /api/payments/confirm",
   "GET    /api/payments",
   "GET    /api/payments/:id",
-  "",
-  "",
   // Reviews   
   "<h2>Reviews</h2>",
   "GET    /api/reviews",
