@@ -6,9 +6,32 @@ import { IUserJWTPayload } from "../users/users.interface";
 import { ICreateReviewPayload, IReviewQuery, IUpdateReviewPayload } from "./reviews.interface";
 
 const baseReviewInclude = {
-    gearItem: true,
+    gearItem: {
+        include: {
+            provider: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                }
+            }
+        },
+        omit: {
+            stock: true,
+            availableStock: true,
+            categoryId: true,
+            createdAt: true,
+            updatedAt: true,
+        }
+    },
     customer: {
-        omit: { password: true }
+        omit: { 
+            password: true,
+            status: true,
+            role: true,
+            created_at: true,
+            updated_at: true,
+        }
     }
 };
 

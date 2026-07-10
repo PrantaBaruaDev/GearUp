@@ -462,16 +462,14 @@ var loginUser = catchAsync(async (req, res, next) => {
   });
 });
 var logoutUser = catchAsync(async (req, res, next) => {
-  res.clearCookie("accessToken", {
+  const isProduction = process.env.NODE_ENV === "production";
+  const cookieOptions = {
     httpOnly: true,
-    secure: false,
-    sameSite: "none"
-  });
-  res.clearCookie("refreshToken", {
-    httpOnly: true,
-    secure: false,
-    sameSite: "none"
-  });
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax"
+  };
+  res.clearCookie("accessToken", cookieOptions);
+  res.clearCookie("refreshToken", cookieOptions);
   sendResponse(res, {
     success: true,
     statusCode: httpStatus2.OK,
@@ -1424,6 +1422,15 @@ var standardOrderInclude = {
   rentalItems: {
     include: {
       gearItem: {
+        include: {
+          provider: {
+            select: {
+              id: true,
+              name: true,
+              email: true
+            }
+          }
+        },
         omit: {
           createdAt: true,
           updatedAt: true
@@ -1431,9 +1438,17 @@ var standardOrderInclude = {
       }
     }
   },
-  payment: true,
+  payment: {
+    omit: {
+      rentalOrderId: true,
+      userId: true,
+      createdAt: true,
+      updatedAt: true
+    }
+  },
   customer: {
     omit: {
+      role: true,
       password: true,
       created_at: true,
       updated_at: true,
@@ -1652,6 +1667,7 @@ var RentalOrdersService = class {
     });
   }
   async updateRentalOrder(user, id, payload) {
+    const { startDate, endDate, status, rentalItems } = payload;
     if (user.role !== Role.PROVIDER && user.role !== Role.ADMIN) {
       throw new ApiError(httpStatus12.FORBIDDEN, "Forbidden: Only providers and admins can update rental orders.");
     }
@@ -1661,17 +1677,20 @@ var RentalOrdersService = class {
     }
     return await prisma.$transaction(async (tx) => {
       const updates = {};
-      const startDate = payload.startDate ? new Date(payload.startDate) : new Date(rentalOrder.startDate);
-      const endDate = payload.endDate ? new Date(payload.endDate) : new Date(rentalOrder.endDate);
-      if (Number.isNaN(startDate.getTime()) || Number.isNaN(endDate.getTime()) || startDate >= endDate) {
+      const start_date = startDate ? new Date(startDate) : new Date(rentalOrder.startDate);
+      const end_date = payload.endDate ? new Date(payload.endDate) : new Date(rentalOrder.endDate);
+      if (Number.isNaN(start_date.getTime()) || Number.isNaN(end_date.getTime()) || start_date >= end_date) {
         throw new ApiError(httpStatus12.BAD_REQUEST, "Invalid timeline date configuration values provided.");
       }
-      if (payload.startDate !== void 0) updates.startDate = startDate;
-      if (payload.endDate !== void 0) updates.endDate = endDate;
-      if (payload.status !== void 0) updates.status = payload.status;
-      const rentDays = this.rentDayCalculation({ startDate, endDate });
-      if (payload.rentalItems && payload.rentalItems.length > 0) {
-        await this.handleItemsUpdate(tx, rentalOrder.id, payload.rentalItems, rentDays, updates);
+      if (startDate !== void 0) updates.startDate = start_date;
+      if (endDate !== void 0) updates.endDate = end_date;
+      if (status !== void 0) updates.status = status;
+      const rentDays = this.rentDayCalculation({
+        startDate: start_date,
+        endDate: end_date
+      });
+      if (rentalItems && rentalItems.length > 0) {
+        await this.handleItemsUpdate(tx, rentalOrder.id, rentalItems, rentDays, updates);
       } else if (payload.startDate !== void 0 || payload.endDate !== void 0) {
         await this.handleDatesUpdate(rentalOrder, rentDays, updates);
       }
@@ -2116,9 +2135,32 @@ import httpStatus17 from "http-status";
 // src/module/reviews/reviews.service.ts
 import httpStatus16 from "http-status";
 var baseReviewInclude = {
-  gearItem: true,
+  gearItem: {
+    include: {
+      provider: {
+        select: {
+          id: true,
+          name: true,
+          email: true
+        }
+      }
+    },
+    omit: {
+      stock: true,
+      availableStock: true,
+      categoryId: true,
+      createdAt: true,
+      updatedAt: true
+    }
+  },
   customer: {
-    omit: { password: true }
+    omit: {
+      password: true,
+      status: true,
+      role: true,
+      created_at: true,
+      updated_at: true
+    }
   }
 };
 var ReviewsService = class {

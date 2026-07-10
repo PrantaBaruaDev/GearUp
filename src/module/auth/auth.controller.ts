@@ -32,17 +32,17 @@ const loginUser = catchAsync( async (req: Request, res: Response, next: NextFunc
 })
 
 const logoutUser = catchAsync( async (req: Request, res: Response, next: NextFunction) => {
-    res.clearCookie("accessToken", {
-        httpOnly: true,
-        secure: false,
-        sameSite: "none"
-    });
+    const isProduction = process.env.NODE_ENV === "production";
 
-    res.clearCookie("refreshToken", {
+    const cookieOptions = {
         httpOnly: true,
-        secure: false,
-        sameSite: "none"
-    });
+        secure: isProduction, 
+        sameSite: isProduction ? ("none" as const) : ("lax" as const), 
+    };
+    
+    res.clearCookie("accessToken", cookieOptions);
+
+    res.clearCookie("refreshToken", cookieOptions);
 
     sendResponse(res, {
         success: true,

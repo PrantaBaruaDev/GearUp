@@ -10,6 +10,15 @@ const standardOrderInclude = {
     rentalItems: {
         include: { 
             gearItem: {
+                include: {
+                    provider: {
+                        select: {
+                            id: true,
+                            name: true,
+                            email: true,
+                        }
+                    },
+                },
                 omit: {
                     createdAt: true,
                     updatedAt: true,
@@ -17,9 +26,17 @@ const standardOrderInclude = {
             } 
         }
     },
-    payment: true,
+    payment: {
+        omit: {
+            rentalOrderId: true,
+            userId: true,
+            createdAt: true,
+            updatedAt: true
+        }
+    },
     customer: {
         omit: {
+            role: true,
             password: true,
             created_at: true,
             updated_at: true,
@@ -188,7 +205,7 @@ class RentalOrdersService {
                         some: { 
                             gearItem: { 
                                 providerId: user.id 
-                            } 
+                            }
                         } 
                     }
                 },
@@ -292,6 +309,8 @@ class RentalOrdersService {
     }
 
     async updateRentalOrder(user: IUserJWTPayload, id: IRentalOrderQuery["id"], payload: Partial<IRentalOrderPayload>) {
+        const { startDate, endDate, status, rentalItems }= payload;
+        
         if (user.role !== Role.PROVIDER && user.role !== Role.ADMIN) {
             throw new ApiError(httpStatus.FORBIDDEN, "Forbidden: Only providers and admins can update rental orders.");
         }
@@ -304,21 +323,24 @@ class RentalOrdersService {
         return await prisma.$transaction(async (tx) => {
             const updates: Record<string, unknown> = {};
 
-            const startDate = payload.startDate ? new Date(payload.startDate) : new Date(rentalOrder.startDate);
-            const endDate = payload.endDate ? new Date(payload.endDate) : new Date(rentalOrder.endDate);
+            const start_date = startDate ? new Date(startDate) : new Date(rentalOrder.startDate);
+            const end_date = payload.endDate ? new Date(payload.endDate) : new Date(rentalOrder.endDate);
 
-            if (Number.isNaN(startDate.getTime()) || Number.isNaN(endDate.getTime()) || startDate >= endDate) {
+            if (Number.isNaN(start_date.getTime()) || Number.isNaN(end_date.getTime()) || start_date >= end_date) {
                 throw new ApiError(httpStatus.BAD_REQUEST, "Invalid timeline date configuration values provided.");
             }
 
-            if (payload.startDate !== undefined) updates.startDate = startDate;
-            if (payload.endDate !== undefined) updates.endDate = endDate;
-            if (payload.status !== undefined) updates.status = payload.status;
+            if (startDate !== undefined) updates.startDate = start_date;
+            if (endDate !== undefined) updates.endDate = end_date;
+            if (status !== undefined) updates.status = status;
 
-            const rentDays = this.rentDayCalculation({ startDate, endDate });
+            const rentDays = this.rentDayCalculation({ 
+                startDate: start_date, 
+                endDate: end_date 
+            });
 
-            if (payload.rentalItems && payload.rentalItems.length > 0) {
-                await this.handleItemsUpdate(tx, rentalOrder.id, payload.rentalItems, rentDays, updates);
+            if (rentalItems && rentalItems.length > 0) {
+                await this.handleItemsUpdate(tx, rentalOrder.id, rentalItems, rentDays, updates);
             } 
             else if (payload.startDate !== undefined || payload.endDate !== undefined) {
                 await this.handleDatesUpdate(rentalOrder, rentDays, updates)
