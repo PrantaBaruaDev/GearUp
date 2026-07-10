@@ -37,6 +37,41 @@
                 }
               },
               "response": []
+            },
+            {
+              "name": "update user status",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"role\": \"ADMIN\",\r\n    \"status\": \"ACTIVE\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{BASE_URL}}/api/admin/users/:id",
+                  "host": [
+                    "{{BASE_URL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "admin",
+                    "users",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "9b276674-1045-4479-8fb2-5f4046269769"
+                    }
+                  ]
+                }
+              },
+              "response": []
             }
           ]
         },
@@ -121,12 +156,10 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:5000/api/auth/me",
-              "protocol": "http",
+              "raw": "{{BASE_URL}}/api/auth/me",
               "host": [
-                "localhost"
+                "{{BASE_URL}}"
               ],
-              "port": "5000",
               "path": [
                 "api",
                 "auth",
@@ -228,26 +261,24 @@
         },
         {
           "name": "get single category",
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          },
           "request": {
             "method": "GET",
             "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "[\r\n    { \"name\": \"Camping\" },\r\n    { \"name\": \"Cycling\" },\r\n    { \"name\": \"Water Sports\" },\r\n    { \"name\": \"Cricat Sports\" },\r\n    { \"name\": \"Football Sports\" },\r\n    { \"name\": \"Mountaineer\" },\r\n    { \"name\": \"Batminton Sports\" }\r\n\r\n]\r\n"
-            },
             "url": {
-              "raw": "http://localhost:5000/api/categories",
-              "protocol": "http",
+              "raw": "{{BASE_URL}}/api/categories/:id",
               "host": [
-                "localhost"
+                "{{BASE_URL}}"
               ],
-              "port": "5000",
               "path": [
                 "api",
-                "categories"
+                "categories",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "0e55a1f6-19c9-4a77-b2bc-42b"
+                }
               ]
             }
           },
@@ -285,9 +316,34 @@
         },
         {
           "name": "category delete",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
           "request": {
-            "method": "DELETE",
-            "header": []
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "[\r\n    { \"name\": \"Camping\" },\r\n    { \"name\": \"Cycling\" },\r\n    { \"name\": \"Water Sports\" },\r\n    { \"name\": \"Cricat Sports\" },\r\n    { \"name\": \"Football Sports\" },\r\n    { \"name\": \"Mountaineer\" },\r\n    { \"name\": \"Batminton Sports\" }\r\n\r\n]\r\n"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/admin/categories/:id",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "categories",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
           },
           "response": []
         }
@@ -342,12 +398,10 @@
                   }
                 },
                 "url": {
-                  "raw": "http://localhost:5000/api/provider/gear/96ccbacb-0937-4a7d-902d-6b9ebdbd4628",
-                  "protocol": "http",
+                  "raw": "{{BASE_URL}}/api/provider/gear/96ccbacb-0937-4a7d-902d-6b9ebdbd4628",
                   "host": [
-                    "localhost"
+                    "{{BASE_URL}}"
                   ],
-                  "port": "5000",
                   "path": [
                     "api",
                     "provider",
@@ -715,21 +769,14 @@
                   "raw": "// [\r\n  {\r\n    \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n    \"startDate\": \"2026-07-10T00:00:00.000Z\",\r\n    \"endDate\": \"2026-07-15T00:00:00.000Z\",\r\n    \"rentalItems\": [\r\n        { \r\n            \"gearItemId\": \"c48b5226-af9f-46d8-a2d4-021b88dfe96d\", \r\n            \"quantity\": 1 \r\n        },\r\n        {  \r\n            \"gearItemId\": \"1adfe808-73e5-4e3f-9be6-ba638021fe45\", \r\n            \"quantity\": 2 \r\n        }\r\n    ],\r\n    \"status\": \"PENDING\"\r\n  }\r\n//   {\r\n//     \"id\": \"ord-00000002-8c8d-4ba6-86f1-a1e43e2bc89a\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-12T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-14T00:00:00.000Z\",\r\n//     \"totalPrice\": 31.00,\r\n//     \"status\": \"PENDING\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000003-ef72-4d30-b3ab-ee2a3b019df4\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-15T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-22T00:00:00.000Z\",\r\n//     \"totalPrice\": 184.50,\r\n//     \"status\": \"APPROVED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000004-921d-40aa-b1b2-1bc32ade45e0\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-18T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-20T00:00:00.000Z\",\r\n//     \"totalPrice\": 45.00,\r\n//     \"status\": \"COMPLETED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000005-cb21-4112-be22-df3ba129bc34\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-20T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-25T00:00:00.000Z\",\r\n//     \"totalPrice\": 220.00,\r\n//     \"status\": \"CANCELLED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000006-031a-429b-bc9d-fe4a39b2cd81\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-22T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-23T00:00:00.000Z\",\r\n//     \"totalPrice\": 12.00,\r\n//     \"status\": \"PENDING\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000007-449e-4fa2-bc40-221de4089aef\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-25T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-28T00:00:00.000Z\",\r\n//     \"totalPrice\": 135.00,\r\n//     \"status\": \"APPROVED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000008-bc4a-4e11-9a1d-d4fa231bcde4\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-27T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-30T00:00:00.000Z\",\r\n//     \"totalPrice\": 90.50,\r\n//     \"status\": \"COMPLETED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000009-efb1-4cd2-a72d-8bc43a129ebd\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-08-01T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-08-05T00:00:00.000Z\",\r\n//     \"totalPrice\": 160.00,\r\n//     \"status\": \"PENDING\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000010-33af-4921-bc7d-ea41b29cefab\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-08-03T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-08-04T00:00:00.000Z\",\r\n//     \"totalPrice\": 48.00,\r\n//     \"status\": \"APPROVED\"\r\n//   }\r\n// ]"
                 },
                 "url": {
-                  "raw": "{{BASE_URL}}/api/provider/orders/:id",
+                  "raw": "{{BASE_URL}}/api/provider/orders",
                   "host": [
                     "{{BASE_URL}}"
                   ],
                   "path": [
                     "api",
                     "provider",
-                    "orders",
-                    ":id"
-                  ],
-                  "variable": [
-                    {
-                      "key": "id",
-                      "value": "b55b903b-ce2a-485c-a773-070009e16b76"
-                    }
+                    "orders"
                   ]
                 }
               },
@@ -813,7 +860,7 @@
                   "variable": [
                     {
                       "key": "id",
-                      "value": "a5b4b17f-d5b5-476c-a4d1-cc13840acc27"
+                      "value": "06db6969-b950-4292-9497-f97f2390841d"
                     }
                   ]
                 }
@@ -874,7 +921,7 @@
                   "variable": [
                     {
                       "key": "id",
-                      "value": "3c5bb130-540d-406c-9f05-772c6d5d21e5"
+                      "value": "b55b903b-ce2a-485c-a773-070009e16b76"
                     }
                   ]
                 }
@@ -890,7 +937,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "// [\r\n//   {\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-10T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-15T00:00:00.000Z\",\r\n//     \"rentalItems\": [\r\n//         { \r\n//             \"gearItemId\": \"c48b5226-af9f-46d8-a2d4-021b88dfe96d\", \r\n//             \"quantity\": 1 \r\n//         },\r\n//         {  \r\n//             \"gearItemId\": \"1adfe808-73e5-4e3f-9be6-ba638021fe45\", \r\n//             \"quantity\": 2 \r\n//         }\r\n//     ],\r\n//     \"status\": \"PENDING\"\r\n//   }\r\n\r\n\r\n  {\r\n    \"startDate\": \"2026-07-10T00:00:00.000Z\",\r\n    \"endDate\": \"2026-07-15T00:00:00.000Z\",\r\n    \r\n            \"customerId\": \"b7c3b7dc-7264-4cab-96ca-63942e90b12d\",\r\n    \"rentalItems\": [\r\n        { \r\n            \"gearItemId\": \"c48b5226-af9f-46d8-a2d4-021b88dfe96d\", \r\n            \"quantity\": 2 \r\n        }\r\n    ]\r\n  }\r\n\r\n//   {\r\n//     \"id\": \"ord-00000002-8c8d-4ba6-86f1-a1e43e2bc89a\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-12T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-14T00:00:00.000Z\",\r\n//     \"totalPrice\": 31.00,\r\n//     \"status\": \"PENDING\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000003-ef72-4d30-b3ab-ee2a3b019df4\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-15T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-22T00:00:00.000Z\",\r\n//     \"totalPrice\": 184.50,\r\n//     \"status\": \"APPROVED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000004-921d-40aa-b1b2-1bc32ade45e0\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-18T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-20T00:00:00.000Z\",\r\n//     \"totalPrice\": 45.00,\r\n//     \"status\": \"COMPLETED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000005-cb21-4112-be22-df3ba129bc34\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-20T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-25T00:00:00.000Z\",\r\n//     \"totalPrice\": 220.00,\r\n//     \"status\": \"CANCELLED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000006-031a-429b-bc9d-fe4a39b2cd81\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-22T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-23T00:00:00.000Z\",\r\n//     \"totalPrice\": 12.00,\r\n//     \"status\": \"PENDING\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000007-449e-4fa2-bc40-221de4089aef\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-25T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-28T00:00:00.000Z\",\r\n//     \"totalPrice\": 135.00,\r\n//     \"status\": \"APPROVED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000008-bc4a-4e11-9a1d-d4fa231bcde4\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-27T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-30T00:00:00.000Z\",\r\n//     \"totalPrice\": 90.50,\r\n//     \"status\": \"COMPLETED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000009-efb1-4cd2-a72d-8bc43a129ebd\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-08-01T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-08-05T00:00:00.000Z\",\r\n//     \"totalPrice\": 160.00,\r\n//     \"status\": \"PENDING\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000010-33af-4921-bc7d-ea41b29cefab\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-08-03T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-08-04T00:00:00.000Z\",\r\n//     \"totalPrice\": 48.00,\r\n//     \"status\": \"APPROVED\"\r\n//   }\r\n// ]",
+              "raw": "// [\r\n//   {\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-10T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-15T00:00:00.000Z\",\r\n//     \"rentalItems\": [\r\n//         { \r\n//             \"gearItemId\": \"c48b5226-af9f-46d8-a2d4-021b88dfe96d\", \r\n//             \"quantity\": 1 \r\n//         },\r\n//         {  \r\n//             \"gearItemId\": \"1adfe808-73e5-4e3f-9be6-ba638021fe45\", \r\n//             \"quantity\": 2 \r\n//         }\r\n//     ],\r\n//     \"status\": \"PENDING\"\r\n//   }\r\n\r\n\r\n  {\r\n    \"startDate\": \"2026-07-10T00:00:00.000Z\",\r\n    \"endDate\": \"2026-07-15T00:00:00.000Z\",\r\n    \r\n            \"customerId\": \"b7c3b7dc-7264-4cab-96ca-63942e90b12d\",\r\n    \"rentalItems\": [\r\n        { \r\n            \"gearItemId\": \"c48b5226-af9f-46d8-a2d4-021b88dfe96d\", \r\n            \"quantity\": 1 \r\n        }\r\n    ]\r\n  }\r\n\r\n//   {\r\n//     \"id\": \"ord-00000002-8c8d-4ba6-86f1-a1e43e2bc89a\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-12T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-14T00:00:00.000Z\",\r\n//     \"totalPrice\": 31.00,\r\n//     \"status\": \"PENDING\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000003-ef72-4d30-b3ab-ee2a3b019df4\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-15T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-22T00:00:00.000Z\",\r\n//     \"totalPrice\": 184.50,\r\n//     \"status\": \"APPROVED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000004-921d-40aa-b1b2-1bc32ade45e0\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-18T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-20T00:00:00.000Z\",\r\n//     \"totalPrice\": 45.00,\r\n//     \"status\": \"COMPLETED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000005-cb21-4112-be22-df3ba129bc34\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-20T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-25T00:00:00.000Z\",\r\n//     \"totalPrice\": 220.00,\r\n//     \"status\": \"CANCELLED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000006-031a-429b-bc9d-fe4a39b2cd81\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-22T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-23T00:00:00.000Z\",\r\n//     \"totalPrice\": 12.00,\r\n//     \"status\": \"PENDING\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000007-449e-4fa2-bc40-221de4089aef\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-25T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-28T00:00:00.000Z\",\r\n//     \"totalPrice\": 135.00,\r\n//     \"status\": \"APPROVED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000008-bc4a-4e11-9a1d-d4fa231bcde4\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-27T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-30T00:00:00.000Z\",\r\n//     \"totalPrice\": 90.50,\r\n//     \"status\": \"COMPLETED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000009-efb1-4cd2-a72d-8bc43a129ebd\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-08-01T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-08-05T00:00:00.000Z\",\r\n//     \"totalPrice\": 160.00,\r\n//     \"status\": \"PENDING\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000010-33af-4921-bc7d-ea41b29cefab\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-08-03T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-08-04T00:00:00.000Z\",\r\n//     \"totalPrice\": 48.00,\r\n//     \"status\": \"APPROVED\"\r\n//   }\r\n// ]",
               "options": {
                 "raw": {
                   "language": "json"
@@ -923,14 +970,20 @@
               "raw": "// [\r\n  {\r\n    \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n    \"startDate\": \"2026-07-10T00:00:00.000Z\",\r\n    \"endDate\": \"2026-07-15T00:00:00.000Z\",\r\n    \"rentalItems\": [\r\n        { \r\n            \"gearItemId\": \"c48b5226-af9f-46d8-a2d4-021b88dfe96d\", \r\n            \"quantity\": 1 \r\n        },\r\n        {  \r\n            \"gearItemId\": \"1adfe808-73e5-4e3f-9be6-ba638021fe45\", \r\n            \"quantity\": 2 \r\n        }\r\n    ],\r\n    \"status\": \"PENDING\"\r\n  }\r\n//   {\r\n//     \"id\": \"ord-00000002-8c8d-4ba6-86f1-a1e43e2bc89a\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-12T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-14T00:00:00.000Z\",\r\n//     \"totalPrice\": 31.00,\r\n//     \"status\": \"PENDING\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000003-ef72-4d30-b3ab-ee2a3b019df4\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-15T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-22T00:00:00.000Z\",\r\n//     \"totalPrice\": 184.50,\r\n//     \"status\": \"APPROVED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000004-921d-40aa-b1b2-1bc32ade45e0\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-18T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-20T00:00:00.000Z\",\r\n//     \"totalPrice\": 45.00,\r\n//     \"status\": \"COMPLETED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000005-cb21-4112-be22-df3ba129bc34\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-20T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-25T00:00:00.000Z\",\r\n//     \"totalPrice\": 220.00,\r\n//     \"status\": \"CANCELLED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000006-031a-429b-bc9d-fe4a39b2cd81\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-22T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-23T00:00:00.000Z\",\r\n//     \"totalPrice\": 12.00,\r\n//     \"status\": \"PENDING\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000007-449e-4fa2-bc40-221de4089aef\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-25T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-28T00:00:00.000Z\",\r\n//     \"totalPrice\": 135.00,\r\n//     \"status\": \"APPROVED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000008-bc4a-4e11-9a1d-d4fa231bcde4\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-07-27T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-07-30T00:00:00.000Z\",\r\n//     \"totalPrice\": 90.50,\r\n//     \"status\": \"COMPLETED\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000009-efb1-4cd2-a72d-8bc43a129ebd\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-08-01T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-08-05T00:00:00.000Z\",\r\n//     \"totalPrice\": 160.00,\r\n//     \"status\": \"PENDING\"\r\n//   },\r\n//   {\r\n//     \"id\": \"ord-00000010-33af-4921-bc7d-ea41b29cefab\",\r\n//     \"customerId\": \"889121c1-12a6-403e-af53-bb080fd67e2f\",\r\n//     \"startDate\": \"2026-08-03T00:00:00.000Z\",\r\n//     \"endDate\": \"2026-08-04T00:00:00.000Z\",\r\n//     \"totalPrice\": 48.00,\r\n//     \"status\": \"APPROVED\"\r\n//   }\r\n// ]"
             },
             "url": {
-              "raw": "{{BASE_URL}}/api/rentals/",
+              "raw": "{{BASE_URL}}/api/rentals/:id",
               "host": [
                 "{{BASE_URL}}"
               ],
               "path": [
                 "api",
                 "rentals",
-                ""
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "af0454da-8020-465f-99b6-9a19e9f026a5"
+                }
               ]
             }
           },
@@ -996,7 +1049,7 @@
                   "variable": [
                     {
                       "key": "id",
-                      "value": ""
+                      "value": "31f8f58c-81f7-4b4e-a153-878b1d6ca30c"
                     }
                   ]
                 }
@@ -1031,7 +1084,7 @@
                   "variable": [
                     {
                       "key": "id",
-                      "value": ""
+                      "value": "7ad8ab91-59b1-48c3-89b5-a962b32c8e21"
                     }
                   ]
                 }
@@ -1159,7 +1212,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"rating\": 1,\r\n    \"comment\": \"test review\",\r\n    \"gearItemId\": \"1ec15160-43e5-42a4-9e6e-53d125b82b9f\"\r\n}",
+              "raw": "{\r\n    \"rating\": 2,\r\n    \"comment\": \"test review me\",\r\n    \"gearItemId\": \"1ec15160-43e5-42a4-9e6e-53d125b82b9f\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1231,20 +1284,13 @@
               }
             },
             "url": {
-              "raw": "{{BASE_URL}}/api/reviews/:id",
+              "raw": "{{BASE_URL}}/api/reviews",
               "host": [
                 "{{BASE_URL}}"
               ],
               "path": [
                 "api",
-                "reviews",
-                ":id"
-              ],
-              "variable": [
-                {
-                  "key": "id",
-                  "value": "1ec15160-43e5-42a4-9e6e-53d125b82b9f"
-                }
+                "reviews"
               ]
             }
           },
@@ -1289,9 +1335,26 @@
         },
         {
           "name": "get reviews",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
           "request": {
             "method": "GET",
-            "header": []
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"rating\": 5,\r\n    \"comment\": \"greate gear i love it\",\r\n    \"gearItemId\": \"1ec15160-43e5-42a4-9e6e-53d125b82b9f\"\r\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/reviews",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "reviews"
+              ]
+            }
           },
           "response": []
         }
@@ -1299,9 +1362,24 @@
     },
     {
       "name": "New Request",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
       "request": {
         "method": "GET",
-        "header": []
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "[\r\n    { \"name\": \"Camping\" },\r\n    { \"name\": \"Cycling\" },\r\n    { \"name\": \"Water Sports\" },\r\n    { \"name\": \"Cricat Sports\" },\r\n    { \"name\": \"Football Sports\" },\r\n    { \"name\": \"Mountaineer\" },\r\n    { \"name\": \"Batminton Sports\" }\r\n\r\n]\r\n"
+        },
+        "url": {
+          "raw": "http://localhost:5000",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000"
+        }
       },
       "response": []
     }

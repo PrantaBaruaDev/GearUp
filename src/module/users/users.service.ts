@@ -166,6 +166,33 @@ class UserService {
 
         return updateProfile;
     }
+
+    async updateUserStatusPatchByAdmin(userId : string, userUpdateProfileId: string, payload : IUserProfilePayload) {
+        const { role, status } = payload as { role: Role,status: ActiveStatus };
+
+        const user = await this.getUserById(userId);
+
+        if(user.role !== Role.ADMIN) {
+            throw new ApiError( httpStatus.FORBIDDEN, "Forbidden: You can update only admin can update.");
+        }
+        const update: Record<string, unknown> = {};
+
+        if(role !== undefined) update.role = role;
+        if(status !== undefined) update.status = status;
+
+        const updateUserStatus = await prisma.users.update({
+            where : { id: userUpdateProfileId },
+            data : update,
+            include: {
+                profiles: true,
+            },
+            omit: {
+                password: true,
+            }
+        })
+
+        return updateUserStatus;
+    }
 }
 
 export default new UserService();

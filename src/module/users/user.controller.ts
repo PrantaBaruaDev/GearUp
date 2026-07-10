@@ -44,8 +44,19 @@ const updateMyProfile = catchAsync( async (req: Request, res: Response, next: Ne
     })
 })
 
-const updateUserStatusPatchByAdmin = catchAsync( async() => {
-    
+const updateUserStatusPatchByAdmin = catchAsync( async(req: Request, res: Response, next: NextFunction) => {
+    const user = req.user?.id as string;
+    const userUpdateProfileId = req.params.id as string;
+    const payload = req.body;
+
+    const response = await UserService.updateUserStatusPatchByAdmin(user, userUpdateProfileId, payload);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "User Profile details update successfully",
+        data: response 
+    })
 })
 
 const getAllUsers = catchAsync( async (req: Request, res: Response, next: NextFunction) => {
