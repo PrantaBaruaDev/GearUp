@@ -637,6 +637,27 @@ var UserService = class {
     });
     return updateProfile;
   }
+  async updateUserStatusPatchByAdmin(userId, userUpdateProfileId, payload) {
+    const { role, status } = payload;
+    const user = await this.getUserById(userId);
+    if (user.role !== Role.ADMIN) {
+      throw new ApiError(httpStatus3.FORBIDDEN, "Forbidden: You can update only admin can update.");
+    }
+    const update = {};
+    if (role !== void 0) update.role = role;
+    if (status !== void 0) update.status = status;
+    const updateUserStatus = await prisma.users.update({
+      where: { id: userUpdateProfileId },
+      data: update,
+      include: {
+        profiles: true
+      },
+      omit: {
+        password: true
+      }
+    });
+    return updateUserStatus;
+  }
 };
 var users_service_default = new UserService();
 
@@ -673,7 +694,17 @@ var updateMyProfile = catchAsync(async (req, res, next) => {
     data: response
   });
 });
-var updateUserStatusPatchByAdmin = catchAsync(async () => {
+var updateUserStatusPatchByAdmin = catchAsync(async (req, res, next) => {
+  const user = req.user?.id;
+  const userUpdateProfileId = req.params.id;
+  const payload = req.body;
+  const response = await users_service_default.updateUserStatusPatchByAdmin(user, userUpdateProfileId, payload);
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus4.OK,
+    message: "User Profile details update successfully",
+    data: response
+  });
 });
 var getAllUsers = catchAsync(async (req, res, next) => {
   const response = await users_service_default.getAllProfileFromDB();
